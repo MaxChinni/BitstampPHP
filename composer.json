@@ -1,0 +1,5 @@
+{
+    "require": {
+        "mathieuviossat/arraytotexttable": "^1.0"
+    }
+}
