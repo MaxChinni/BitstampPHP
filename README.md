@@ -32,7 +32,7 @@ echo print_r($data, 1)."\n";
 
 # Final
 
-If this wrapper helped you in any way, you can always leave me a tip at (BTC) 1AqoRjfksnh9pmSYM4Uejzd3WJ6Rm8gU13
+If this wrapper helped you in any way, you can always leave me a tip at (BTC) `1AqoRjfksnh9pmSYM4Uejzd3WJ6Rm8gU13`
 ![Bitcoin tip](assets/bitcoin-tip.png)
 
 # License
