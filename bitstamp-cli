@@ -26,6 +26,9 @@ $cli = Cli::create()
     ->command('balance')
     ->command('openOrders')
     ->command('userTransactions')
+        ->opt('offset:o', 'Offset', false, 'string')
+        ->opt('limit:l', 'Limit', false, 'string')
+        ->opt('sort:s', 'Sort', false, 'string')
     ->command('openOrders')
     ->command('cancelAllOrders')
     ->command('buy')
@@ -97,7 +100,11 @@ switch ($command = $args->getCommand()) {
         printTable($data);
         break;
     case 'userTransactions':
-        $data = $bitstamp->userTransactions(0, 10, 'desc');
+        $offset = $args->getOpt('offset', 0);
+        $limit = $args->getOpt('limit', 10);
+        $sort = $args->getOpt('sort', 'desc');
+        echon("$offset $limit $sort");
+        $data = $bitstamp->userTransactions($offset, $limit, $sort);
         printTable($data);
         break;
     case 'openOrders':
