@@ -5,14 +5,14 @@ namespace Mx17\BitstampPHP;
 class BitstampNet
 {
     private $curl;
-    private $allowedCurrencyPair = array('btcusd', 'btceur', 'eurusd', 'xrpusd', 'xrpeur',
-            'xrpbtc', 'ltcusd', 'ltceur', 'ltcbtc', 'ethusd', 'etheur', 'ethbtc');
     private $nonce;
     private $options = array(
         'customerId' => null,
         'apiKey' => null,
         'secret' => null
     );
+    private $allowedCurrencyPair = array('btcusd', 'btceur', 'eurusd', 'xrpusd', 'xrpeur',
+            'xrpbtc', 'ltcusd', 'ltceur', 'ltcbtc', 'ethusd', 'etheur', 'ethbtc');
     private $transactionTypeHumanReadable = array(
          0 => 'deposit',
          1 => 'withdrawal',
@@ -23,7 +23,6 @@ class BitstampNet
          0 => 'buy',
          1 => 'sell'
     );
-
 
     public function __construct($options = array())
     {
