@@ -116,8 +116,9 @@ Liquidation address info                  | *currently unsupported*
 
 # Final
 
-If this project helped you in any way, you can always leave me a tip at (BTC) `1AqoRjfksnh9pmSYM4Uejzd3WJ6Rm8gU13`
-![Bitcoin tip](assets/bitcoin-tip.png)
+<img align="right" alt="bitcoin tip" src="assets/bitcoin-tip.png" />
+
+If this project helped you in any way, you can always leave me a tip at (BTC) `1AqoRjfksnh9pmSYM4Uejzd3WJ6Rm8gU13`.
 
 # License
 
