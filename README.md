@@ -2,7 +2,9 @@ Current status: INCOMPLETE and not very well tested, but usable.
 
 # BitstampPHP
 
-A basic PHP API wrapper class and a CLI for the [Bitstamp REST API v2](https://www.bitstamp.net/api/). Please refer to [their documentation](https://www.bitstamp.net/api/) for calls descriptions.
+**A PHP API wrapper class and a CLI** for the [Bitstamp REST API v2](https://www.bitstamp.net/api/). Please refer to [their documentation](https://www.bitstamp.net/api/) for calls descriptions.
+
+Basically you can get Bitstamp's current exchange rates, place orders to trade Bitcoins for Euros or United States Dollars, check your open orders, see previous user transactions etc.
 
 ## Disclaimer
 
