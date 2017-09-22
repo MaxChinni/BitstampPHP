@@ -128,27 +128,27 @@ switch ($command = $args->getCommand()) {
         printTable($data);
         break;
     case 'cancelAllOrders':
-        if (askConfirmation($noPrompt)) {
+        if ($noPrompt || askConfirmation()) {
             $data = $bitstamp->cancelAllOrders();
             echo print_r($data, 1)."\n";
         }
         break;
     case 'buy':
-        if (askConfirmation($noPrompt)) {
-            $amount = $args->getOpt('amount');
-            $price = $args->getOpt('price');
-            $limitPrice = $args->getOpt('limit-price');
-            $dailyOrder = $args->getOpt('daily-order');
-            if ($amount === 'all') {
-                $buyableBTC = howManyBTCCanIBuyWithAllMyBalance($bitstamp, $price);
-                $amount = $buyableBTC;
-            }
+        $amount = $args->getOpt('amount');
+        $price = $args->getOpt('price');
+        $limitPrice = $args->getOpt('limit-price');
+        $dailyOrder = $args->getOpt('daily-order');
+        if ($amount === 'all') {
+            $buyableBTC = howManyBTCCanIBuyWithAllMyBalance($bitstamp, $price);
+            $amount = $buyableBTC;
+        }
+        if ($noPrompt || askConfirmation("Buy $amount BTC at $price {$bitstamp->getCurrency()}")) {
             $data = $bitstamp->buy($amount, $price, $limitPrice, $dailyOrder);
             printTable(array($data));
         }
         break;
     case 'sell':
-        if (askConfirmation($noPrompt)) {
+        if ($noPrompt || askConfirmation()) {
             $amount = $args->getOpt('amount');
             $price = $args->getOpt('price');
             $limitPrice = $args->getOpt('limit-price');
@@ -162,7 +162,7 @@ switch ($command = $args->getCommand()) {
         echo print_r($data, 1)."\n";
         break;
     case 'cancelOrder':
-        if (askConfirmation($noPrompt)) {
+        if ($noPrompt || askConfirmation()) {
             $orderId = $args->getArg('orderId');
             $data = $bitstamp->cancelOrder($orderId);
             printTable(array($data));
