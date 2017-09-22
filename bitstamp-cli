@@ -105,7 +105,6 @@ switch ($command = $args->getCommand()) {
         $offset = $args->getOpt('offset', 0);
         $limit = $args->getOpt('limit', 10);
         $sort = $args->getOpt('sort', 'desc');
-        echon("$offset $limit $sort");
         $data = $bitstamp->userTransactions($offset, $limit, $sort);
         printTable($data);
         break;
