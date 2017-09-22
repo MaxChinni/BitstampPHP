@@ -29,7 +29,7 @@ $cli = Cli::create()
     ->command('openOrders')
     ->command('cancelAllOrders')
     ->command('buy')
-        ->opt('amount:a', 'Amount', true, 'string')
+        ->opt('amount:a', 'Amount. You can specify "all" to invest all your available budget', true, 'string')
         ->opt('price:p', 'Price', true, 'string')
         ->opt(
             'limit-price:l',
@@ -113,6 +113,10 @@ switch ($command = $args->getCommand()) {
         $price = $args->getOpt('price');
         $limitPrice = $args->getOpt('limit-price');
         $dailyOrder = $args->getOpt('daily-order');
+        if ($amount === 'all') {
+            $buyableBTC = howManyBTCCanIBuyWithAllMyBalance($bitstamp, $price);
+            $amount = $buyableBTC;
+        }
         $data = $bitstamp->buy($amount, $price, $limitPrice, $dailyOrder);
         break;
     case 'sell':
