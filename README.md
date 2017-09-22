@@ -1,15 +1,49 @@
-Current status: INCOMPLETE and not very well tested.
+Current status: INCOMPLETE and not very well tested, but usable.
 
 # BitstampPHP
 
 A basic PHP API wrapper class and a CLI for the [Bitstamp REST API v2](https://www.bitstamp.net/api/). Please refer to [their documentation](https://www.bitstamp.net/api/) for all calls explained.
 
-## Requirements
+## Usage
 
-* PHP
-* [composer](https://getcomposer.org/)
+### CLI usage examples
+
+**Get current exchange rates**
+
+    $ ./bitstamp-cli ticker
+    +---------+---------+------------+---------+---------+---------------+---------+---------+---------+
+    |  HIGH   |  LAST   | TIMESTAMP  |   BID   |  VWAP   |    VOLUME     |   LOW   |   ASK   |  OPEN   |
+    +---------+---------+------------+---------+---------+---------------+---------+---------+---------+
+    | 3268.59 | 3014.12 | 1506089415 | 3003.81 | 3090.59 | 3117.96511945 | 2968.60 | 3014.12 | 3051.69 |
+    +---------+---------+------------+---------+---------+---------------+---------+---------+---------+
+
+**Get EUR/USD conversion rate**
+
+    $ ./bitstamp-cli conversionRate
+    +--------+--------+
+    |  SELL  |  BUY   |
+    +--------+--------+
+    | 1.1928 | 1.2060 |
+    +--------+--------+
+
+**Place an order to buy 1 BTC at the price of 2900 €**
+
+    $ ./bitstamp-cli buy --amount 1 --price 2900 --currency btceur
+
+### BitstampPHP PHP class usage
+
+Example of usage
+
+```php
+$bitstamp = new Mx17\BitstampPHP\BitstampNet($localConfig);
+
+$data = $bitstamp->ticker();
+echo print_r($data, 1)."\n";
+```
 
 ## Install
+
+You need a working PHP environment and [composer](https://getcomposer.org/)
 
     git clone https://github.com/MaxChinni/BitstampPHP.git
     cd BitstampPHP/
@@ -35,19 +69,7 @@ $localConfig = array(
 );
 ```
 
-## The Bitstamp CLI
-
-This part of the documentation has to be completed.
-
-## The PHP class
-
-```php
-$bitstamp = new Mx17\BitstampPHP\BitstampNet($localConfig);
-
-$data = $bitstamp->ticker();
-echo print_r($data, 1)."\n";
-```
-### API v2 implementation
+## API v2 implementation
 
 call                                      | method
 ----------------------------------------- | ------------------------------

@@ -64,7 +64,9 @@ $cli = Cli::create()
     ->command('orderStatus')
         ->arg('orderId', 'The order id.', true)
     ->command('cancelOrder')
-        ->arg('orderId', 'The order id.', true);
+        ->arg('orderId', 'The order id.', true)
+    ->command('*')
+        ->opt('currency', '', false);
 
 $args = $cli->parse($argv, true);
 $currency = $args->getOpt('currency', $bitstamp->getCurrency());
