@@ -16,22 +16,32 @@ if (file_exists(__DIR__.'/config-local.php')) {
 // Init BitstampNet class with local config
 $bitstamp = new Mx17\BitstampPHP\BitstampNet($localConfig);
 
+$currencyOptionDescription = 'Set currency pair. Supported values: '.
+    implode(', ', $bitstamp->getAllowedCurrencyPairs());
 $cli = Cli::create()
     ->command('ticker')
+        ->opt('currency', $currencyOptionDescription, false)
     ->command('tickerHour')
+        ->opt('currency', $currencyOptionDescription, false)
     ->command('orderBook')
+        ->opt('currency', $currencyOptionDescription, false)
     ->command('transactions')
+        ->opt('currency', $currencyOptionDescription, false)
     ->command('conversionRate')
         ->description('EUR/USD conversion rate')
     ->command('balance')
+        ->opt('currency', $currencyOptionDescription, false)
     ->command('openOrders')
     ->command('userTransactions')
+        ->opt('currency', $currencyOptionDescription, false)
         ->opt('offset:o', 'Offset', false, 'string')
         ->opt('limit:l', 'Limit', false, 'string')
         ->opt('sort:s', 'Sort', false, 'string')
     ->command('openOrders')
+        ->opt('currency', $currencyOptionDescription, false)
     ->command('cancelAllOrders')
     ->command('buy')
+        ->opt('currency', $currencyOptionDescription, false)
         ->opt('amount:a', 'Amount. You can specify "all" to invest all your available budget', true, 'string')
         ->opt('price:p', 'Price', true, 'string')
         ->opt(
@@ -47,6 +57,7 @@ $cli = Cli::create()
             'boolean'
         )
     ->command('sell')
+        ->opt('currency', $currencyOptionDescription, false)
         ->opt('amount:a', 'Amount', true, 'string')
         ->opt('price:p', 'Price', true, 'string')
         ->opt(
@@ -64,9 +75,7 @@ $cli = Cli::create()
     ->command('orderStatus')
         ->arg('orderId', 'The order id.', true)
     ->command('cancelOrder')
-        ->arg('orderId', 'The order id.', true)
-    ->command('*')
-        ->opt('currency', '', false);
+        ->arg('orderId', 'The order id.', true);
 
 $args = $cli->parse($argv, true);
 $currency = $args->getOpt('currency', $bitstamp->getCurrency());
