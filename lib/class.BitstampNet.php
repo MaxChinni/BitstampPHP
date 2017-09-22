@@ -56,7 +56,7 @@ class BitstampNet
     public function setCurrency($currency)
     {
         if (! in_array($currency, $this->allowedCurrencyPair)) {
-            throw new Exception('impossible parameter');
+            throw new \Exception('impossible parameter');
         }
         $this->currentCurrency = $currency;
     }
