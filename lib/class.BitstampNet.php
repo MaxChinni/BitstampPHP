@@ -5,8 +5,8 @@ namespace Mx17\BitstampPHP;
 class BitstampNet
 {
     private $curl;
-    private $currencyPair = array('btcusd', 'btceur', 'eurusd', 'xrpusd', 'xrpeur', 'xrpbtc',
-            'ltcusd', 'ltceur', 'ltcbtc', 'ethusd', 'etheur', 'ethbtc');
+    private $allowedCurrencyPair = array('btcusd', 'btceur', 'eurusd', 'xrpusd', 'xrpeur',
+            'xrpbtc', 'ltcusd', 'ltceur', 'ltcbtc', 'ethusd', 'etheur', 'ethbtc');
     private $nonce;
     private $options = array(
         'customerId' => null,
@@ -43,7 +43,7 @@ class BitstampNet
     public function ticker($change = 'btceur')
     {
         $url = "https://www.bitstamp.net/api/v2/ticker/$change/";
-        if (! in_array($change, $this->currencyPair)) {
+        if (! in_array($change, $this->allowedCurrencyPair)) {
             throw new Exception('impossible parameter');
         }
 
@@ -54,7 +54,7 @@ class BitstampNet
     {
         $url = "https://www.bitstamp.net/api/v2/ticker_hour/$change/";
 
-        if (! in_array($change, $this->currencyPair)) {
+        if (! in_array($change, $this->allowedCurrencyPair)) {
             throw new \Exception('impossible parameter');
         }
 
@@ -65,7 +65,7 @@ class BitstampNet
     {
         $url = "https://www.bitstamp.net/api/v2/order_book/$change/";
 
-        if (! in_array($change, $this->currencyPair)) {
+        if (! in_array($change, $this->allowedCurrencyPair)) {
             throw new \Exception('impossible parameter');
         }
 
@@ -76,7 +76,7 @@ class BitstampNet
     {
         $url = "https://www.bitstamp.net/api/v2/transactions/$change/";
 
-        if (! in_array($change, $this->currencyPair)) {
+        if (! in_array($change, $this->allowedCurrencyPair)) {
             throw new \Exception('impossible parameter');
         }
 
@@ -87,7 +87,7 @@ class BitstampNet
     {
         $url = "https://www.bitstamp.net/api/v2/balance/$change/";
 
-        if (! in_array($change, $this->currencyPair)) {
+        if (! in_array($change, $this->allowedCurrencyPair)) {
             throw new \Exception('impossible parameter');
         }
 
@@ -101,7 +101,7 @@ class BitstampNet
     {
         $url = "https://www.bitstamp.net/api/v2/user_transactions/$change/";
 
-        if (! in_array($change, $this->currencyPair)) {
+        if (! in_array($change, $this->allowedCurrencyPair)) {
             throw new \Exception('impossible parameter');
         }
         if (! is_int($offset)) {
@@ -136,7 +136,7 @@ class BitstampNet
     {
         $url = "https://www.bitstamp.net/api/v2/open_orders/$change/";
 
-        if (! in_array($change, $this->currencyPair)) {
+        if (! in_array($change, $this->allowedCurrencyPair)) {
             throw new \Exception('impossible parameter');
         }
 
@@ -191,7 +191,7 @@ class BitstampNet
     {
         $url = "https://www.bitstamp.net/api/v2/buy/$change/";
 
-        if (! in_array($change, $this->currencyPair)) {
+        if (! in_array($change, $this->allowedCurrencyPair)) {
             throw new \Exception('impossible parameter');
         }
 
