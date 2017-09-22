@@ -2,7 +2,7 @@ Current status: INCOMPLETE and not very well tested, but usable.
 
 # BitstampPHP
 
-A basic PHP API wrapper class and a CLI for the [Bitstamp REST API v2](https://www.bitstamp.net/api/). Please refer to [their documentation](https://www.bitstamp.net/api/) for all calls explained.
+A basic PHP API wrapper class and a CLI for the [Bitstamp REST API v2](https://www.bitstamp.net/api/). Please refer to [their documentation](https://www.bitstamp.net/api/) for calls descriptions.
 
 ## Disclaimer
 
