@@ -3,24 +3,44 @@
 require __DIR__ . '/vendor/autoload.php';
 require __DIR__.'/lib/class.BitstampNet.php';
 require __DIR__.'/lib/debug.php';
+require __DIR__.'/lib/bitstamp-cli-utilities.php';
 
 $localConfig = array();
 if (file_exists(__DIR__.'/config-local.php')) {
     require __DIR__.'/config-local.php';
 }
 
+if ($argc === 1) {
+    printUsage();
+    exit(0);
+}
+$action = $argv[1];
+
 $cli = new Mx17\BitstampPHP\BitstampNet($localConfig);
 $cli->setCurrency('btceur');
 
-$data = $cli->ticker();
-printTable(array($data));
-//echo "ticker: ".print_r($data, 1)."\n";
-
-//$data = $cli->tickerHour();
-//echo "ticker_hour: ".print_r($data, 1)."\n";
-
-//$data = $cli->orderBook();
-//echo "ticker_hour: ".print_r($data, 1)."\n";
+switch ($action) {
+    case 'ticker':
+        $data = $cli->ticker();
+        printTable(array($data));
+        break;
+    case 'tickerHour':
+        $data = $cli->tickerHour();
+        printTable(array($data));
+        break;
+    case 'orderBook':
+        $data = $cli->orderBook();
+        echo print_r($data, 1)."\n";
+        break;
+    case 'transactions':
+        $data = $cli->transactions();
+        printTable($data);
+        break;
+    default:
+        echon(basename(__FILE__).": unrecognized argument");
+        exit(1);
+        break;
+}
 
 //echo "== Transactions\n";
 //$data = $cli->transactions();
@@ -32,13 +52,13 @@ printTable(array($data));
 //$data = $cli->balance();
 //echo "balance: ".print_r($data, 1)."\n";
 
-echo "== All open orders\n";
-$data = $cli->openOrders();
-printTable($data);
+//echo "== All open orders\n";
+//$data = $cli->openOrders();
+//printTable($data);
 
-echo "== User transactions\n";
-$data = $cli->userTransactions(0, 10, 'desc');
-printTable($data);
+//echo "== User transactions\n";
+//$data = $cli->userTransactions(0, 10, 'desc');
+//printTable($data);
 
 //echo "== Open new order\n";
 //$data = $cli->buy(1, 25);
