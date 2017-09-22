@@ -55,7 +55,7 @@ class BitstampNet
         //curl_setopt($this->curl, CURLOPT_HEADER, 1);
     }
 
-    public function setCurrency($currency)
+    public function setCurrency(string $currency)
     {
         if (! in_array($currency, $this->allowedCurrencyPair)) {
             throw new \Exception('impossible parameter');
@@ -108,7 +108,7 @@ class BitstampNet
             'nonce' => $this->nonce));
     }
 
-    public function userTransactions($offset, $limit, $sort)
+    public function userTransactions(int $offset, int $limit, string $sort)
     {
         $url = "https://www.bitstamp.net/api/v2/user_transactions/{$this->currentCurrency}/";
 
@@ -191,7 +191,7 @@ class BitstampNet
             'nonce' => $this->nonce));
     }
 
-    public function buy($amount, $price, $limitPrice = null, $dailyOrder = false)
+    public function buy(float $amount, float $price, float $limitPrice = null, $dailyOrder = false)
     {
         $url = "https://www.bitstamp.net/api/v2/buy/{$this->currentCurrency}/";
 
@@ -205,7 +205,7 @@ class BitstampNet
             'daily_order' => $dailyOrder));
     }
 
-    public function sell($amount, $price, $limitPrice = null, $dailyOrder = false)
+    public function sell(float $amount, float $price, float $limitPrice = null, $dailyOrder = false)
     {
         $url = "https://www.bitstamp.net/api/v2/sell/{$this->currentCurrency}/";
 
@@ -224,7 +224,7 @@ class BitstampNet
         return $this->get("https://www.bitstamp.net/api/eur_usd/");
     }
 
-    private function get($url, $parameters = array(), $json = true)
+    private function get(string $url, $parameters = array(), $json = true)
     {
         curl_setopt($this->curl, CURLOPT_URL, $url);
         $body = curl_exec($this->curl);
@@ -239,7 +239,7 @@ class BitstampNet
         return $body;
     }
 
-    private function post($url, $parameters = array(), $json = true)
+    private function post(string $url, $parameters = array(), $json = true)
     {
         curl_setopt($this->curl, CURLOPT_URL, $url);
         curl_setopt($this->curl, CURLOPT_POST, true);
