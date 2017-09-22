@@ -7,9 +7,16 @@ class BitstampNet
     private $curl;
     private $nonce;
     private $options = array(
-        'customerId' => null,
-        'apiKey' => null,
-        'secret' => null
+        'bitstamp' => array(
+            'customerId' => null,
+            'apiKey' => null,
+            'secret' => null),
+        'proxy' => array(
+            'host' => null,
+            'port' => null,
+            'username' => null,
+            'password' => null
+        )
     );
     private $allowedCurrencyPair = array('btcusd', 'btceur', 'eurusd', 'xrpusd', 'xrpeur',
             'xrpbtc', 'ltcusd', 'ltceur', 'ltcbtc', 'ethusd', 'etheur', 'ethbtc');
@@ -26,14 +33,19 @@ class BitstampNet
 
     public function __construct($options = array())
     {
-        $this->options = array_replace($this->options, $options);
-        $proxy = '127.0.0.1:5865';
-        $proxyauth = null;
+        $this->options = array_replace_recursive($this->options, $options);
         $this->curl = curl_init();
-        curl_setopt($this->curl, CURLOPT_PROXY, $proxy);
-        if ($proxyauth !== null) {
-            curl_setopt($this->curl, CURLOPT_PROXYUSERPWD, $proxyauth);
+
+        // Proxy
+        if ($this->options['proxy']['host'] && $this->options['proxy']['port']) {
+            $proxy = $this->options['proxy']['host'].':'.$this->options['proxy']['port'];
+            curl_setopt($this->curl, CURLOPT_PROXY, $proxy);
+            if ($this->options['proxy']['username'] && $this->options['proxy']['password']) {
+                $auth = $this->options['proxy']['username'].':'.$this->options['proxy']['password'];
+                curl_setopt($this->curl, CURLOPT_PROXYUSERPWD, $auth);
+            }
         }
+
         curl_setopt($this->curl, CURLOPT_FOLLOWLOCATION, 1);
         curl_setopt($this->curl, CURLOPT_RETURNTRANSFER, 1);
         //curl_setopt($this->curl, CURLOPT_HEADER, 1);
@@ -91,7 +103,7 @@ class BitstampNet
         }
 
         return $this->post($url, array(
-            'key' => $this->options['apiKey'],
+            'key' => $this->options['bitstamp']['apiKey'],
             'signature' => $this->signature(),
             'nonce' => $this->nonce));
     }
@@ -114,7 +126,7 @@ class BitstampNet
         }
 
         $data = $this->post($url, array(
-            'key' => $this->options['apiKey'],
+            'key' => $this->options['bitstamp']['apiKey'],
             'signature' => $this->signature(),
             'nonce' => $this->nonce,
             'offset' => $offset,
@@ -140,7 +152,7 @@ class BitstampNet
         }
 
         $data = $this->post($url, array(
-            'key' => $this->options['apiKey'],
+            'key' => $this->options['bitstamp']['apiKey'],
             'signature' => $this->signature(),
             'nonce' => $this->nonce));
 
@@ -159,7 +171,7 @@ class BitstampNet
         $url = 'https://www.bitstamp.net/api/order_status/';
 
         return $this->post($url, array(
-            'key' => $this->options['apiKey'],
+            'key' => $this->options['bitstamp']['apiKey'],
             'signature' => $this->signature(),
             'nonce' => $this->nonce,
             'id' => $orderId));
@@ -170,7 +182,7 @@ class BitstampNet
         $url = 'https://www.bitstamp.net/api/v2/cancel_order/';
 
         return $this->post($url, array(
-            'key' => $this->options['apiKey'],
+            'key' => $this->options['bitstamp']['apiKey'],
             'signature' => $this->signature(),
             'nonce' => $this->nonce,
             'id' => $orderId));
@@ -181,7 +193,7 @@ class BitstampNet
         $url = 'https://www.bitstamp.net/api/cancel_all_orders/';
 
         return $this->post($url, array(
-            'key' => $this->options['apiKey'],
+            'key' => $this->options['bitstamp']['apiKey'],
             'signature' => $this->signature(),
             'nonce' => $this->nonce));
     }
@@ -195,7 +207,7 @@ class BitstampNet
         }
 
         return $this->post($url, array(
-            'key' => $this->options['apiKey'],
+            'key' => $this->options['bitstamp']['apiKey'],
             'signature' => $this->signature(),
             'nonce' => $this->nonce,
             'amount' => $amount,
@@ -263,8 +275,11 @@ class BitstampNet
 
     private function signature()
     {
-        $message = $this->getNewNonce() . $this->options['customerId'] . $this->options['apiKey'];
+        $customerId = $this->options['bitstamp']['customerId'];
+        $apiKey = $this->options['bitstamp']['apiKey'];
+        $secret = $this->options['bitstamp']['secret'];
+        $message = $this->getNewNonce() . $customerId . $apiKey;
 
-        return strtoupper(hash_hmac('sha256', $message, $this->options['secret']));
+        return strtoupper(hash_hmac('sha256', $message, $secret));
     }
 }

@@ -22,9 +22,15 @@ Create a `config-local.php` with your data; that's for private API calls (which 
 ```bash
 <?php
 $localConfig = array(
-    'customerId' => '000000',
-    'apiKey' => 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
-    'secret' => 'yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy'
+    'bitstamp' => array(
+        'customerId' => '000000',
+        'apiKey' => 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
+        'secret' => 'yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy'
+    'proxy' => array(
+        'host' => '192.168.0.200',
+        'port' => 8080,
+        'username' => 'myUsername',
+        'password' => 'mySecretPassword')
 );
 ```
 
