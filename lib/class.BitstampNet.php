@@ -262,13 +262,13 @@ class BitstampNet
 
         if (isset($body['status']) && $body['status'] == 'error') {
             if (isset($body['reason']['__all__'])) {
-                throw new \Exception(implode("\n", $body['reason']['__all__']));
+                throw new APIErrorException(implode("\n", $body['reason']['__all__']));
             } else {
-                throw new \Exception(implode("\n", $body['reason']));
+                throw new APIErrorException(implode("\n", $body['reason']));
             }
         }
         if (isset($body['error'])) {
-            throw new \Exception($body['error']);
+            throw new APIErrorException($body['error']);
         }
 
         return $body;

@@ -1,6 +1,7 @@
 #!/usr/bin/php
 <?php
 require __DIR__ . '/vendor/autoload.php';
+require __DIR__.'/lib/class.APIException.php';
 require __DIR__.'/lib/class.BitstampNet.php';
 require __DIR__.'/lib/debug.php';
 require __DIR__.'/lib/bitstamp-cli-utilities.php';
@@ -87,93 +88,98 @@ $currency = $args->getOpt('currency', $bitstamp->getCurrency());
 $bitstamp->setCurrency($currency);
 $noPrompt = $args->getOpt('no-prompt', false);
 
-switch ($command = $args->getCommand()) {
-    case 'ticker':
-        $data = $bitstamp->ticker();
-        printTable(array($data));
-        break;
-    case 'tickerHour':
-        $data = $bitstamp->tickerHour();
-        printTable(array($data));
-        break;
-    case 'orderBook':
-        $data = $bitstamp->orderBook();
-        echo print_r($data, 1)."\n";
-        break;
-    case 'transactions':
-        $data = $bitstamp->transactions();
-        printTable($data);
-        break;
-    case 'conversionRate':
-        $data = $bitstamp->conversionRate();
-        printTable(array($data));
-        break;
-    case 'balance':
-        $data = $bitstamp->balance();
-        printTable(array($data));
-        break;
-    case 'openOrders':
-        $data = $bitstamp->openOrders();
-        printTable($data);
-        break;
-    case 'userTransactions':
-        $offset = $args->getOpt('offset', 0);
-        $limit = $args->getOpt('limit', 10);
-        $sort = $args->getOpt('sort', 'desc');
-        $data = $bitstamp->userTransactions($offset, $limit, $sort);
-        printTable($data);
-        break;
-    case 'openOrders':
-        $data = $bitstamp->openOrders();
-        printTable($data);
-        break;
-    case 'cancelAllOrders':
-        if ($noPrompt || askConfirmation()) {
-            $data = $bitstamp->cancelAllOrders();
+try {
+    switch ($command = $args->getCommand()) {
+        case 'ticker':
+            $data = $bitstamp->ticker();
+            printTable(array($data));
+            break;
+        case 'tickerHour':
+            $data = $bitstamp->tickerHour();
+            printTable(array($data));
+            break;
+        case 'orderBook':
+            $data = $bitstamp->orderBook();
             echo print_r($data, 1)."\n";
-        }
-        break;
-    case 'buy':
-        $amount = $args->getOpt('amount');
-        $price = $args->getOpt('price');
-        $limitPrice = $args->getOpt('limit-price');
-        $dailyOrder = $args->getOpt('daily-order');
-        if ($amount === 'all') {
-            $buyableBTC = howManyBTCCanIBuyWithAllMyBalance($bitstamp, $price);
-            $amount = $buyableBTC;
-        }
-        $prompt = "Buy $amount BTC for $price {$bitstamp->getCurrency()}";
-        if ($noPrompt || askConfirmation($prompt)) {
-            $data = $bitstamp->buy($amount, $price, $limitPrice, $dailyOrder);
+            break;
+        case 'transactions':
+            $data = $bitstamp->transactions();
+            printTable($data);
+            break;
+        case 'conversionRate':
+            $data = $bitstamp->conversionRate();
             printTable(array($data));
-        }
-        break;
-    case 'sell':
-        $amount = $args->getOpt('amount');
-        $price = $args->getOpt('price');
-        $limitPrice = $args->getOpt('limit-price');
-        $dailyOrder = $args->getOpt('daily-order');
-        $prompt = "Sell $amount BTC for $price {$bitstamp->getCurrency()}";
-        if ($noPrompt || askConfirmation($prompt)) {
-            $data = $bitstamp->sell($amount, $price, $limitPrice, $dailyOrder);
-        }
-        break;
-    case 'orderStatus':
-        $orderId = $args->getArg('orderId');
-        $data = $bitstamp->orderStatus($orderId);
-        echo print_r($data, 1)."\n";
-        break;
-    case 'cancelOrder':
-        if ($noPrompt || askConfirmation()) {
+            break;
+        case 'balance':
+            $data = $bitstamp->balance();
+            printTable(array($data));
+            break;
+        case 'openOrders':
+            $data = $bitstamp->openOrders();
+            printTable($data);
+            break;
+        case 'userTransactions':
+            $offset = $args->getOpt('offset', 0);
+            $limit = $args->getOpt('limit', 10);
+            $sort = $args->getOpt('sort', 'desc');
+            $data = $bitstamp->userTransactions($offset, $limit, $sort);
+            printTable($data);
+            break;
+        case 'openOrders':
+            $data = $bitstamp->openOrders();
+            printTable($data);
+            break;
+        case 'cancelAllOrders':
+            if ($noPrompt || askConfirmation()) {
+                $data = $bitstamp->cancelAllOrders();
+                echo print_r($data, 1)."\n";
+            }
+            break;
+        case 'buy':
+            $amount = $args->getOpt('amount');
+            $price = $args->getOpt('price');
+            $limitPrice = $args->getOpt('limit-price');
+            $dailyOrder = $args->getOpt('daily-order');
+            if ($amount === 'all') {
+                $buyableBTC = howManyBTCCanIBuyWithAllMyBalance($bitstamp, $price);
+                $amount = $buyableBTC;
+            }
+            $prompt = "Buy $amount BTC for $price {$bitstamp->getCurrency()}";
+            if ($noPrompt || askConfirmation($prompt)) {
+                $data = $bitstamp->buy($amount, $price, $limitPrice, $dailyOrder);
+                printTable(array($data));
+            }
+            break;
+        case 'sell':
+            $amount = $args->getOpt('amount');
+            $price = $args->getOpt('price');
+            $limitPrice = $args->getOpt('limit-price');
+            $dailyOrder = $args->getOpt('daily-order');
+            $prompt = "Sell $amount BTC for $price {$bitstamp->getCurrency()}";
+            if ($noPrompt || askConfirmation($prompt)) {
+                $data = $bitstamp->sell($amount, $price, $limitPrice, $dailyOrder);
+            }
+            break;
+        case 'orderStatus':
             $orderId = $args->getArg('orderId');
-            $data = $bitstamp->cancelOrder($orderId);
-            printTable(array($data));
-        }
-        break;
-    default:
-        echon(basename(__FILE__).": unrecognized argument \"$command\"");
-        exit(1);
-        break;
+            $data = $bitstamp->orderStatus($orderId);
+            echo print_r($data, 1)."\n";
+            break;
+        case 'cancelOrder':
+            if ($noPrompt || askConfirmation()) {
+                $orderId = $args->getArg('orderId');
+                $data = $bitstamp->cancelOrder($orderId);
+                printTable(array($data));
+            }
+            break;
+        default:
+            echon(basename(__FILE__).": unrecognized argument \"$command\"");
+            exit(1);
+            break;
+    }
+} catch (Mx17\BitstampPHP\APIErrorException $e) {
+    echon(basename(__FILE__).": ".$e->getMessage());
+    exit(33);
 }
 
 // vim: syntax=php
