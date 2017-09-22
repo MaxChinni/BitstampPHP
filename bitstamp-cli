@@ -36,35 +36,41 @@ switch ($action) {
         $data = $cli->transactions();
         printTable($data);
         break;
+    case 'conversionRate':
+        $data = $cli->conversionRate();
+        printTable(array($data));
+        break;
+    case 'balance':
+        $data = $cli->balance();
+        printTable(array($data));
+        break;
+    case 'openOrders':
+        $data = $cli->openOrders();
+        printTable($data);
+        break;
+    case 'userTransactions':
+        $data = $cli->userTransactions(0, 10, 'desc');
+        printTable($data);
+        break;
+    case 'openOrders':
+        $data = $cli->openOrders();
+        printTable($data);
+        break;
+    case 'cancelAllOrders':
+        $data = $cli->cancelAllOrders();
+        echo print_r($data, 1)."\n";
+        break;
     default:
         echon(basename(__FILE__).": unrecognized argument");
         exit(1);
         break;
 }
 
-//echo "== Transactions\n";
-//$data = $cli->transactions();
-//printTable($data);
-
-//$data = $cli->conversionRate();
-//echo "conversionRate: ".print_r($data, 1)."\n";
-
-//$data = $cli->balance();
-//echo "balance: ".print_r($data, 1)."\n";
-
-//echo "== All open orders\n";
-//$data = $cli->openOrders();
-//printTable($data);
-
-//echo "== User transactions\n";
-//$data = $cli->userTransactions(0, 10, 'desc');
-//printTable($data);
-
 //echo "== Open new order\n";
 //$data = $cli->buy(1, 25);
 //echo print_r($data, 1)."\n";
 //$orderId = $data['id'];
-//
+
 //echo "== Open new order\n";
 //$data = $cli->buy(1, 25.5, 9000);
 //echo print_r($data, 1)."\n";
@@ -74,20 +80,7 @@ switch ($action) {
 //$data = $cli->orderStatus($orderId);
 //echo print_r($data, 1)."\n";
 
-//echo "== All open orders\n";
-//$data = $cli->openOrders();
-//printTable($data);
-
 //$data = $cli->cancelOrder($orderId);
 //echo print_r($data, 1)."\n";
-
-//echo "== Cancel all orders\n";
-//$data = $cli->cancelAllOrders();
-//echo print_r($data, 1)."\n";
-
-//echo "== All open orders\n";
-//$data = $cli->openOrders();
-//printTable($data);
-
 
 // vim: syntax=php
