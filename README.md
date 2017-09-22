@@ -8,7 +8,7 @@ Basically you can get Bitstamp's current exchange rates, place orders to trade B
 
 ## Disclaimer
 
-No guarantee or warranty implied. Use at your own risk. Be careful to set the right parameters expecially when placing orders.
+No guarantee or warranty implied. Use at your own risk. Be careful to set the right parameters expecially when placing orders. Please remember that I will take no responsibility for the integrity or reliability of this library and will not be responsible for any damage or loss of earnings caused by the use of this library.
 
 ## Usage
 
