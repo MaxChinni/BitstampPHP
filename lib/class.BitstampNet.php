@@ -20,7 +20,7 @@ class BitstampNet
         )
     );
     private $currentCurrency;
-    private $allowedCurrencyPair = array('btcusd', 'btceur', 'eurusd', 'xrpusd', 'xrpeur',
+    private $allowedCurrencyPairs = array('btcusd', 'btceur', 'eurusd', 'xrpusd', 'xrpeur',
             'xrpbtc', 'ltcusd', 'ltceur', 'ltcbtc', 'ethusd', 'etheur', 'ethbtc');
     private $transactionTypeHumanReadable = array(0 => 'buy', 1 => 'sell');
     private $userTransactionTypeHumanReadable = array(
@@ -55,9 +55,14 @@ class BitstampNet
         //curl_setopt($this->curl, CURLOPT_HEADER, 1);
     }
 
+    public function getAllowedCurrencyPairs()
+    {
+        return $this->allowedCurrencyPairs;
+    }
+
     public function setCurrency(string $currency)
     {
-        if (! in_array($currency, $this->allowedCurrencyPair)) {
+        if (! in_array($currency, $this->allowedCurrencyPairs)) {
             throw new \Exception('impossible parameter');
         }
         $this->currentCurrency = $currency;
