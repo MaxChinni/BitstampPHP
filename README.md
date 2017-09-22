@@ -40,6 +40,44 @@ $cli = new Mx17\BitstampPHP\BitstampNet($localConfig);
 $data = $cli->ticker();
 echo print_r($data, 1)."\n";
 ```
+### API v2 implementation
+
+call                                      | method
+----------------------------------------- | ------------------------------
+Ticker                                    | `ticker($change = 'btceur')`
+Hourly ticker                             | `tickerHour($change = 'btceur')`
+Order book                                | `orderBook($change = 'btceur')`
+Transactions                              | `transactions($change = 'btceur')`
+EUR/USD conversion rate                   | `conversionRate()`
+Account balance                           | `balance($change = 'btceur')`
+User transactions                         | `userTransactions($offset, $limit, $sort, $change = 'btceur')`
+Open orders                               | `openOrders($change = 'btceur')`
+Order status                              | `orderStatus($orderId)`
+Cancel order                              | `cancelOrder($orderId)`
+Cancel all orders                         | `cancelAllOrders()`
+Buy limit order                           | `buy($amount, $price, $limitPrice = null, $dailyOrder = false, $change = 'btceur')`
+Buy market order                          |
+Sell limit order                          |
+Sell market order                         |
+Withdrawal requests                       |
+Bitcoin withdrawal                        |
+Litecoin withdrawal                       |
+Litecoin deposit address                  |
+ETH withdrawal                            |
+ETH deposit address                       |
+Bitcoin deposit address                   |
+Unconfirmed bitcoin deposits              |
+Ripple withdrawal                         |
+Ripple deposit address                    |
+Transfer balance from Sub to Main account |
+Transfer balance from Main to Sub Account |
+XRP withdrawal                            |
+XRP deposit address                       |
+Open bank withdrawal                      |
+Bank withdrawal status                    |
+Cancel bank withdrawal                    |
+New liquidation address                   |
+Liquidation address info                  |
 
 # Final
 
