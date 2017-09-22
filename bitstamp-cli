@@ -5,82 +5,115 @@ require __DIR__.'/lib/class.BitstampNet.php';
 require __DIR__.'/lib/debug.php';
 require __DIR__.'/lib/bitstamp-cli-utilities.php';
 
+use Garden\Cli\Cli;
+
+// Load local config file
 $localConfig = array();
 if (file_exists(__DIR__.'/config-local.php')) {
     require __DIR__.'/config-local.php';
 }
 
-if ($argc === 1) {
-    printUsage();
-    exit(0);
-}
-$action = $argv[1];
+// Init BitstampNet class with local config
+$bitstamp = new Mx17\BitstampPHP\BitstampNet($localConfig);
 
-$cli = new Mx17\BitstampPHP\BitstampNet($localConfig);
-$cli->setCurrency('btceur');
+$cli = Cli::create()
+    ->command('ticker')
+    ->command('tickerHour')
+    ->command('orderBook')
+    ->command('transactions')
+    ->command('conversionRate')
+        ->description('EUR/USD conversion rate')
+    ->command('balance')
+    ->command('openOrders')
+    ->command('userTransactions')
+    ->command('openOrders')
+    ->command('cancelAllOrders')
+    ->command('buy')
+        ->opt('amount:a', 'Amount', true, 'string')
+        ->opt('price:p', 'Price', true, 'string')
+        ->opt(
+            'limit-price:l',
+            'If the order gets executed, a new sell order will be placed, with "limit-price" as its price.',
+            false,
+            'string'
+        )
+        ->opt(
+            'daily-order:d',
+            'Opens buy limit order which will be canceled at 00:00 UTC unless it already has been executed.',
+            false,
+            'boolean'
+        )
+    ->command('orderStatus')
+        ->arg('orderId', 'The order id.', true)
+    ->command('cancelOrder')
+        ->arg('orderId', 'The order id.', true);
 
-switch ($action) {
+$args = $cli->parse($argv, true);
+$currency = $args->getOpt('currency', $bitstamp->getCurrency());
+$bitstamp->setCurrency($currency);
+
+switch ($command = $args->getCommand()) {
     case 'ticker':
-        $data = $cli->ticker();
+        $data = $bitstamp->ticker();
         printTable(array($data));
         break;
     case 'tickerHour':
-        $data = $cli->tickerHour();
+        $data = $bitstamp->tickerHour();
         printTable(array($data));
         break;
     case 'orderBook':
-        $data = $cli->orderBook();
+        $data = $bitstamp->orderBook();
         echo print_r($data, 1)."\n";
         break;
     case 'transactions':
-        $data = $cli->transactions();
+        $data = $bitstamp->transactions();
         printTable($data);
         break;
     case 'conversionRate':
-        $data = $cli->conversionRate();
+        $data = $bitstamp->conversionRate();
         printTable(array($data));
         break;
     case 'balance':
-        $data = $cli->balance();
+        $data = $bitstamp->balance();
         printTable(array($data));
         break;
     case 'openOrders':
-        $data = $cli->openOrders();
+        $data = $bitstamp->openOrders();
         printTable($data);
         break;
     case 'userTransactions':
-        $data = $cli->userTransactions(0, 10, 'desc');
+        $data = $bitstamp->userTransactions(0, 10, 'desc');
         printTable($data);
         break;
     case 'openOrders':
-        $data = $cli->openOrders();
+        $data = $bitstamp->openOrders();
         printTable($data);
         break;
     case 'cancelAllOrders':
-        $data = $cli->cancelAllOrders();
+        $data = $bitstamp->cancelAllOrders();
+        echo print_r($data, 1)."\n";
+        break;
+    case 'buy':
+        $amount = $args->getOpt('amount');
+        $price = $args->getOpt('price');
+        $limitPrice = $args->getOpt('limit-price');
+        $dailyOrder = $args->getOpt('daily-order');
+        $data = $bitstamp->buy($amount, $price, $limitPrice, $dailyOrder);
+        break;
+    case 'orderStatus':
+        $orderId = $args->getArg('orderId');
+        $data = $bitstamp->orderStatus($orderId);
+        echo print_r($data, 1)."\n";
+        break;
+    case 'cancelOrder':
+        $orderId = $args->getArg('orderId');
+        $data = $bitstamp->cancelOrder($orderId);
         echo print_r($data, 1)."\n";
         break;
     default:
-        echon(basename(__FILE__).": unrecognized argument");
+        echon(basename(__FILE__).": unrecognized argument \"$command\"");
         exit(1);
         break;
 }
-
-//echo "== Open new order\n";
-//$data = $cli->buy(1, 25);
-//echo print_r($data, 1)."\n";
-//$orderId = $data['id'];
-
-//echo "== Open new order\n";
-//$data = $cli->buy(1, 25.5, 9000);
-//echo print_r($data, 1)."\n";
-//$orderId = $data['id'];
-
-//echo "== Order status $orderId\n";
-//$data = $cli->orderStatus($orderId);
-//echo print_r($data, 1)."\n";
-
-//$data = $cli->cancelOrder($orderId);
-//echo print_r($data, 1)."\n";
 
 // vim: syntax=php

@@ -1,5 +1,6 @@
 {
     "require": {
-        "mathieuviossat/arraytotexttable": "^1.0"
+        "mathieuviossat/arraytotexttable": "^1.0",
+        "vanilla/garden-cli": "^1.6"
     }
 }
