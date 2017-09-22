@@ -21,3 +21,12 @@ function howManyBTCCanIBuyWithAllMyBalance($bitstamp, $price)
 
     return $btc;
 }
+
+function askConfirmation($noPrompt = false)
+{
+    if ($noPrompt) {
+        return true;
+    }
+    $response = readline("Are you sure? (Yes/[No]) ");
+    return $response === 'Yes';
+}
