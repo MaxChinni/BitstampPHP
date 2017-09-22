@@ -43,6 +43,21 @@ $cli = Cli::create()
             false,
             'boolean'
         )
+    ->command('sell')
+        ->opt('amount:a', 'Amount', true, 'string')
+        ->opt('price:p', 'Price', true, 'string')
+        ->opt(
+            'limit-price:l',
+            'If the order gets executed, a new buy order will be placed, with "limit-price" as its price.',
+            false,
+            'string'
+        )
+        ->opt(
+            'daily-order:d',
+            'Opens sell limit order which will be canceled at 00:00 UTC unless it already has been executed.',
+            false,
+            'boolean'
+        )
     ->command('orderStatus')
         ->arg('orderId', 'The order id.', true)
     ->command('cancelOrder')
@@ -100,6 +115,13 @@ switch ($command = $args->getCommand()) {
         $dailyOrder = $args->getOpt('daily-order');
         $data = $bitstamp->buy($amount, $price, $limitPrice, $dailyOrder);
         break;
+    case 'sell':
+        $amount = $args->getOpt('amount');
+        $price = $args->getOpt('price');
+        $limitPrice = $args->getOpt('limit-price');
+        $dailyOrder = $args->getOpt('daily-order');
+        $data = $bitstamp->sell($amount, $price, $limitPrice, $dailyOrder);
+        break;
     case 'orderStatus':
         $orderId = $args->getArg('orderId');
         $data = $bitstamp->orderStatus($orderId);
@@ -108,7 +130,7 @@ switch ($command = $args->getCommand()) {
     case 'cancelOrder':
         $orderId = $args->getArg('orderId');
         $data = $bitstamp->cancelOrder($orderId);
-        echo print_r($data, 1)."\n";
+        printTable(array($data));
         break;
     default:
         echon(basename(__FILE__).": unrecognized argument \"$command\"");

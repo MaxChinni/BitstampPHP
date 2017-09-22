@@ -205,6 +205,20 @@ class BitstampNet
             'daily_order' => $dailyOrder));
     }
 
+    public function sell($amount, $price, $limitPrice = null, $dailyOrder = false)
+    {
+        $url = "https://www.bitstamp.net/api/v2/sell/{$this->currentCurrency}/";
+
+        return $this->post($url, array(
+            'key' => $this->options['bitstamp']['apiKey'],
+            'signature' => $this->signature(),
+            'nonce' => $this->nonce,
+            'amount' => $amount,
+            'price' => $price,
+            'limit_price' => $limitPrice,
+            'daily_order' => $dailyOrder));
+    }
+
     public function conversionRate()
     {
         return $this->get("https://www.bitstamp.net/api/eur_usd/");
@@ -247,6 +261,9 @@ class BitstampNet
             } else {
                 throw new \Exception(implode("\n", $body['reason']));
             }
+        }
+        if (isset($body['error'])) {
+            throw new \Exception($body['error']);
         }
 
         return $body;

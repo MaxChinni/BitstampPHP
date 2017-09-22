@@ -64,7 +64,7 @@ Cancel order                              | `cancelOrder($orderId)`
 Cancel all orders                         | `cancelAllOrders()`
 Buy limit order                           | `buy($amount, $price, $limitPrice = null, $dailyOrder = false)`
 Buy market order                          |
-Sell limit order                          |
+Sell limit order                          | `sell($amount, $price, $limitPrice = null, $dailyOrder = false)`
 Sell market order                         |
 Withdrawal requests                       |
 Bitcoin withdrawal                        |
