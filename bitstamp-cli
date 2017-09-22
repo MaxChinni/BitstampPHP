@@ -142,17 +142,19 @@ switch ($command = $args->getCommand()) {
             $buyableBTC = howManyBTCCanIBuyWithAllMyBalance($bitstamp, $price);
             $amount = $buyableBTC;
         }
-        if ($noPrompt || askConfirmation("Buy $amount BTC at $price {$bitstamp->getCurrency()}")) {
+        $prompt = "Buy $amount BTC for $price {$bitstamp->getCurrency()}";
+        if ($noPrompt || askConfirmation($prompt)) {
             $data = $bitstamp->buy($amount, $price, $limitPrice, $dailyOrder);
             printTable(array($data));
         }
         break;
     case 'sell':
-        if ($noPrompt || askConfirmation()) {
-            $amount = $args->getOpt('amount');
-            $price = $args->getOpt('price');
-            $limitPrice = $args->getOpt('limit-price');
-            $dailyOrder = $args->getOpt('daily-order');
+        $amount = $args->getOpt('amount');
+        $price = $args->getOpt('price');
+        $limitPrice = $args->getOpt('limit-price');
+        $dailyOrder = $args->getOpt('daily-order');
+        $prompt = "Sell $amount BTC for $price {$bitstamp->getCurrency()}";
+        if ($noPrompt || askConfirmation($prompt)) {
             $data = $bitstamp->sell($amount, $price, $limitPrice, $dailyOrder);
         }
         break;
