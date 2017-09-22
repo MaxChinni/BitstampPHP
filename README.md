@@ -4,9 +4,20 @@ Current status: INCOMPLETE.
 
 A basic API wrapper class and a CLI for the [Bitstamp REST API](https://www.bitstamp.net/api/). Please refer to [their documentation](https://www.bitstamp.net/api/) for all calls explained. All in PHP. All for APIv2.
 
-## bitstamp-cli
+## Requirements
 
-Create a `config-local.php` with your data, if you need authorized access.
+* PHP
+* [composer](https://getcomposer.org/)
+
+## Install
+
+    git clone https://github.com/MaxChinni/BitstampPHP.git
+    cd BitstampPHP/
+    composer.phar update
+
+## Configure
+
+Create a `config-local.php` with your data; that's for private API calls (which require authentication).
 
 ```bash
 <?php
@@ -17,7 +28,11 @@ $localConfig = array(
 );
 ```
 
-## bitstamp PHP class
+## The Bitstamp CLI
+
+This part of the documentation has to be completed.
+
+## The PHP class
 
 ```php
 $cli = new Mx17\BitstampPHP\BitstampNet($localConfig);
@@ -26,13 +41,9 @@ $data = $cli->ticker();
 echo print_r($data, 1)."\n";
 ```
 
-# Requirements
-
-* PHP
-
 # Final
 
-If this wrapper helped you in any way, you can always leave me a tip at (BTC) `1AqoRjfksnh9pmSYM4Uejzd3WJ6Rm8gU13`
+If this project helped you in any way, you can always leave me a tip at (BTC) `1AqoRjfksnh9pmSYM4Uejzd3WJ6Rm8gU13`
 ![Bitcoin tip](assets/bitcoin-tip.png)
 
 # License
