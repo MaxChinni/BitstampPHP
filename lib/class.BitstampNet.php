@@ -18,6 +18,7 @@ class BitstampNet
             'password' => null
         )
     );
+    private $currentCurrency = 'btcusd';
     private $allowedCurrencyPair = array('btcusd', 'btceur', 'eurusd', 'xrpusd', 'xrpeur',
             'xrpbtc', 'ltcusd', 'ltceur', 'ltcbtc', 'ethusd', 'etheur', 'ethbtc');
     private $transactionTypeHumanReadable = array(
@@ -51,56 +52,37 @@ class BitstampNet
         //curl_setopt($this->curl, CURLOPT_HEADER, 1);
     }
 
-    public function ticker($change = 'btceur')
+    public function setCurrency($currency)
     {
-        $url = "https://www.bitstamp.net/api/v2/ticker/$change/";
-        if (! in_array($change, $this->allowedCurrencyPair)) {
+        if (! in_array($currency, $this->allowedCurrencyPair)) {
             throw new Exception('impossible parameter');
         }
-
-        return $this->get($url);
+        $this->currentCurrency = $currency;
     }
 
-    public function tickerHour($change = 'btceur')
+    public function ticker()
     {
-        $url = "https://www.bitstamp.net/api/v2/ticker_hour/$change/";
-
-        if (! in_array($change, $this->allowedCurrencyPair)) {
-            throw new \Exception('impossible parameter');
-        }
-
-        return $this->get($url);
+        return $this->get("https://www.bitstamp.net/api/v2/ticker/{$this->currentCurrency}/");
     }
 
-    public function orderBook($change = 'btceur')
+    public function tickerHour()
     {
-        $url = "https://www.bitstamp.net/api/v2/order_book/$change/";
-
-        if (! in_array($change, $this->allowedCurrencyPair)) {
-            throw new \Exception('impossible parameter');
-        }
-
-        return $this->get($url);
+        return $this->get("https://www.bitstamp.net/api/v2/ticker_hour/{$this->currentCurrency}/");
     }
 
-    public function transactions($change = 'btceur')
+    public function orderBook()
     {
-        $url = "https://www.bitstamp.net/api/v2/transactions/$change/";
-
-        if (! in_array($change, $this->allowedCurrencyPair)) {
-            throw new \Exception('impossible parameter');
-        }
-
-        return $this->get($url);
+        return $this->get("https://www.bitstamp.net/api/v2/order_book/{$this->currentCurrency}/");
     }
 
-    public function balance($change = 'btceur')
+    public function transactions()
     {
-        $url = "https://www.bitstamp.net/api/v2/balance/$change/";
+        return $this->get("https://www.bitstamp.net/api/v2/transactions/{$this->currentCurrency}/");
+    }
 
-        if (! in_array($change, $this->allowedCurrencyPair)) {
-            throw new \Exception('impossible parameter');
-        }
+    public function balance()
+    {
+        $url = "https://www.bitstamp.net/api/v2/balance/{$this->currentCurrency}/";
 
         return $this->post($url, array(
             'key' => $this->options['bitstamp']['apiKey'],
@@ -108,21 +90,18 @@ class BitstampNet
             'nonce' => $this->nonce));
     }
 
-    public function userTransactions($offset, $limit, $sort, $change = 'btceur')
+    public function userTransactions($offset, $limit, $sort)
     {
-        $url = "https://www.bitstamp.net/api/v2/user_transactions/$change/";
+        $url = "https://www.bitstamp.net/api/v2/user_transactions/{$this->currentCurrency}/";
 
-        if (! in_array($change, $this->allowedCurrencyPair)) {
-            throw new \Exception('impossible parameter');
-        }
         if (! is_int($offset)) {
             throw new \Exception('impossible offset value "'.$offset.'"');
         }
-        if (! is_int($offset) || $limit > 1000) {
+        if (! is_int($limit) || $limit > 1000) {
             throw new \Exception('impossible limit value');
         }
         if (! in_array($sort, array('asc', 'desc'))) {
-            throw new \Exception('impossible limit value');
+            throw new \Exception('impossible sort value');
         }
 
         $data = $this->post($url, array(
@@ -143,20 +122,16 @@ class BitstampNet
         return $data;
     }
 
-    public function openOrders($change = 'btceur')
+    public function openOrders()
     {
-        $url = "https://www.bitstamp.net/api/v2/open_orders/$change/";
-
-        if (! in_array($change, $this->allowedCurrencyPair)) {
-            throw new \Exception('impossible parameter');
-        }
+        $url = "https://www.bitstamp.net/api/v2/open_orders/{$this->currentCurrency}/";
 
         $data = $this->post($url, array(
             'key' => $this->options['bitstamp']['apiKey'],
             'signature' => $this->signature(),
             'nonce' => $this->nonce));
 
-        // Transaction type
+        // Order type
         foreach ($data as $c => $order) {
             $order['type_human_readable'] =
                 $this->orderTypeHumanReadable[$order['type']];
@@ -198,13 +173,9 @@ class BitstampNet
             'nonce' => $this->nonce));
     }
 
-    public function buy($amount, $price, $limitPrice = null, $dailyOrder = false, $change = 'btceur')
+    public function buy($amount, $price, $limitPrice = null, $dailyOrder = false)
     {
-        $url = "https://www.bitstamp.net/api/v2/buy/$change/";
-
-        if (! in_array($change, $this->allowedCurrencyPair)) {
-            throw new \Exception('impossible parameter');
-        }
+        $url = "https://www.bitstamp.net/api/v2/buy/{$this->currentCurrency}/";
 
         return $this->post($url, array(
             'key' => $this->options['bitstamp']['apiKey'],

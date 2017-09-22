@@ -10,6 +10,7 @@ if (file_exists(__DIR__.'/config-local.php')) {
 }
 
 $cli = new Mx17\BitstampPHP\BitstampNet($localConfig);
+$cli->setCurrency('btceur');
 
 $data = $cli->ticker();
 printTable(array($data));
