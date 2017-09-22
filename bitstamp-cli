@@ -9,7 +9,7 @@ if (file_exists(__DIR__.'/config-local.php')) {
     require __DIR__.'/config-local.php';
 }
 
-$cli = new netmx17bitstampnetcli\BitstampNet($localConfig);
+$cli = new Mx17\BitstampPHP\BitstampNet($localConfig);
 
 $data = $cli->ticker();
 printTable(array($data));

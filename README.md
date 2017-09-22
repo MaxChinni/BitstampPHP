@@ -20,7 +20,7 @@ $localConfig = array(
 ## bitstamp PHP class
 
 ```php
-$cli = new netmx17bitstampnetcli\BitstampNet($localConfig);
+$cli = new Mx17\BitstampPHP\BitstampNet($localConfig);
 
 $data = $cli->ticker();
 echo print_r($data, 1)."\n";

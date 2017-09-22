@@ -1,6 +1,6 @@
 <?php
 
-namespace netmx17bitstampnetcli;
+namespace Mx17\BitstampPHP;
 
 class BitstampNet
 {
