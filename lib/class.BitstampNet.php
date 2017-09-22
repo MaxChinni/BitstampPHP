@@ -21,7 +21,8 @@ class BitstampNet
     private $currentCurrency = 'btcusd';
     private $allowedCurrencyPair = array('btcusd', 'btceur', 'eurusd', 'xrpusd', 'xrpeur',
             'xrpbtc', 'ltcusd', 'ltceur', 'ltcbtc', 'ethusd', 'etheur', 'ethbtc');
-    private $transactionTypeHumanReadable = array(
+    private $transactionTypeHumanReadable = array(0 => 'buy', 1 => 'sell');
+    private $userTransactionTypeHumanReadable = array(
          0 => 'deposit',
          1 => 'withdrawal',
          2 => 'market trade',
@@ -77,7 +78,17 @@ class BitstampNet
 
     public function transactions()
     {
-        return $this->get("https://www.bitstamp.net/api/v2/transactions/{$this->currentCurrency}/");
+        $url = "https://www.bitstamp.net/api/v2/transactions/{$this->currentCurrency}/";
+        $data = $this->get($url);
+
+        // Transaction type
+        foreach ($data as $c => $transaction) {
+            $transaction['type_human_readable'] =
+                $this->transactionTypeHumanReadable[$transaction['type']];
+            $data[$c] = $transaction;
+        }
+
+        return $data;
     }
 
     public function balance()
@@ -115,7 +126,7 @@ class BitstampNet
         // Transaction type
         foreach ($data as $c => $transaction) {
             $transaction['type_human_readable'] =
-                $this->transactionTypeHumanReadable[$transaction['type']];
+                $this->userTransactionTypeHumanReadable[$transaction['type']];
             $data[$c] = $transaction;
         }
 
