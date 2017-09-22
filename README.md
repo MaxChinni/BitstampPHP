@@ -63,28 +63,28 @@ Order status                              | `orderStatus($orderId)`
 Cancel order                              | `cancelOrder($orderId)`
 Cancel all orders                         | `cancelAllOrders()`
 Buy limit order                           | `buy($amount, $price, $limitPrice = null, $dailyOrder = false)`
-Buy market order                          |
+Buy market order                          | *currently unsupported*
 Sell limit order                          | `sell($amount, $price, $limitPrice = null, $dailyOrder = false)`
-Sell market order                         |
-Withdrawal requests                       |
-Bitcoin withdrawal                        |
-Litecoin withdrawal                       |
-Litecoin deposit address                  |
-ETH withdrawal                            |
-ETH deposit address                       |
-Bitcoin deposit address                   |
-Unconfirmed bitcoin deposits              |
-Ripple withdrawal                         |
-Ripple deposit address                    |
-Transfer balance from Sub to Main account |
-Transfer balance from Main to Sub Account |
-XRP withdrawal                            |
-XRP deposit address                       |
-Open bank withdrawal                      |
-Bank withdrawal status                    |
-Cancel bank withdrawal                    |
-New liquidation address                   |
-Liquidation address info                  |
+Sell market order                         | *currently unsupported*
+Withdrawal requests                       | *currently unsupported*
+Bitcoin withdrawal                        | *currently unsupported*
+Litecoin withdrawal                       | *currently unsupported*
+Litecoin deposit address                  | *currently unsupported*
+ETH withdrawal                            | *currently unsupported*
+ETH deposit address                       | *currently unsupported*
+Bitcoin deposit address                   | *currently unsupported*
+Unconfirmed bitcoin deposits              | *currently unsupported*
+Ripple withdrawal                         | *currently unsupported*
+Ripple deposit address                    | *currently unsupported*
+Transfer balance from Sub to Main account | *currently unsupported*
+Transfer balance from Main to Sub Account | *currently unsupported*
+XRP withdrawal                            | *currently unsupported*
+XRP deposit address                       | *currently unsupported*
+Open bank withdrawal                      | *currently unsupported*
+Bank withdrawal status                    | *currently unsupported*
+Cancel bank withdrawal                    | *currently unsupported*
+New liquidation address                   | *currently unsupported*
+Liquidation address info                  | *currently unsupported*
 
 # Final
 
