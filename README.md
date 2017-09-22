@@ -1,4 +1,4 @@
-Current status: INCOMPLETE.
+Current status: INCOMPLETE and not very well tested.
 
 # BitstampPHP
 
