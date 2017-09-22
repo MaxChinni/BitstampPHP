@@ -42,9 +42,9 @@ This part of the documentation has to be completed.
 ## The PHP class
 
 ```php
-$cli = new Mx17\BitstampPHP\BitstampNet($localConfig);
+$bitstamp = new Mx17\BitstampPHP\BitstampNet($localConfig);
 
-$data = $cli->ticker();
+$data = $bitstamp->ticker();
 echo print_r($data, 1)."\n";
 ```
 ### API v2 implementation
