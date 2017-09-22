@@ -158,6 +158,7 @@ try {
             $prompt = "Sell $amount BTC for $price {$bitstamp->getCurrency()}";
             if ($noPrompt || askConfirmation($prompt)) {
                 $data = $bitstamp->sell($amount, $price, $limitPrice, $dailyOrder);
+                printTable(array($data));
             }
             break;
         case 'orderStatus':
