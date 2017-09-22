@@ -10,7 +10,8 @@ class BitstampNet
         'bitstamp' => array(
             'customerId' => null,
             'apiKey' => null,
-            'secret' => null),
+            'secret' => null,
+            'currency' => 'btcusd'),
         'proxy' => array(
             'host' => null,
             'port' => null,
@@ -18,7 +19,7 @@ class BitstampNet
             'password' => null
         )
     );
-    private $currentCurrency = 'btcusd';
+    private $currentCurrency;
     private $allowedCurrencyPair = array('btcusd', 'btceur', 'eurusd', 'xrpusd', 'xrpeur',
             'xrpbtc', 'ltcusd', 'ltceur', 'ltcbtc', 'ethusd', 'etheur', 'ethbtc');
     private $transactionTypeHumanReadable = array(0 => 'buy', 1 => 'sell');
@@ -36,6 +37,7 @@ class BitstampNet
     public function __construct($options = array())
     {
         $this->options = array_replace_recursive($this->options, $options);
+        $this->setCurrency($this->options['bitstamp']['currency']);
         $this->curl = curl_init();
 
         // Proxy
@@ -59,6 +61,11 @@ class BitstampNet
             throw new \Exception('impossible parameter');
         }
         $this->currentCurrency = $currency;
+    }
+
+    public function getCurrency()
+    {
+        return $this->currentCurrency;
     }
 
     public function ticker()
