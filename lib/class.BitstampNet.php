@@ -96,6 +96,9 @@ class BitstampNet
             }
         }
 
+        // Add currency
+        $newData['currency'] = $this->currentCurrency;
+
         return $newData;
     }
 
@@ -118,6 +121,7 @@ class BitstampNet
         foreach ($data as $c => $transaction) {
             $transaction['type_human_readable'] =
                 $this->transactionTypeHumanReadable[$transaction['type']];
+            $transaction['currency'] = $this->currentCurrency;
             $data[$c] = $transaction;
         }
 
@@ -128,10 +132,14 @@ class BitstampNet
     {
         $url = "https://www.bitstamp.net/api/v2/balance/{$this->currentCurrency}/";
 
-        return $this->post($url, array(
+        $data = $this->post($url, array(
             'key' => $this->options['bitstamp']['apiKey'],
             'signature' => $this->signature(),
             'nonce' => $this->nonce));
+        // Add currency
+        $data['currency'] = $this->currentCurrency;
+
+        return $data;
     }
 
     public function userTransactions(int $offset, int $limit, string $sort)
@@ -160,6 +168,7 @@ class BitstampNet
         foreach ($data as $c => $transaction) {
             $transaction['type_human_readable'] =
                 $this->userTransactionTypeHumanReadable[$transaction['type']];
+            $transaction['currency'] = $this->currentCurrency;
             $data[$c] = $transaction;
         }
 
@@ -179,6 +188,7 @@ class BitstampNet
         foreach ($data as $c => $order) {
             $order['type_human_readable'] =
                 $this->orderTypeHumanReadable[$order['type']];
+            $order['currency'] = $this->currentCurrency;
             $data[$c] = $order;
         }
 
@@ -221,7 +231,7 @@ class BitstampNet
     {
         $url = "https://www.bitstamp.net/api/v2/buy/{$this->currentCurrency}/";
 
-        return $this->post($url, array(
+        $data = $this->post($url, array(
             'key' => $this->options['bitstamp']['apiKey'],
             'signature' => $this->signature(),
             'nonce' => $this->nonce,
@@ -229,13 +239,17 @@ class BitstampNet
             'price' => $price,
             'limit_price' => $limitPrice,
             'daily_order' => $dailyOrder));
+        // Add currency
+        $data['currency'] = $this->currentCurrency;
+
+        return $data;
     }
 
     public function sell(float $amount, float $price, float $limitPrice = null, $dailyOrder = false)
     {
         $url = "https://www.bitstamp.net/api/v2/sell/{$this->currentCurrency}/";
 
-        return $this->post($url, array(
+        $data = $this->post($url, array(
             'key' => $this->options['bitstamp']['apiKey'],
             'signature' => $this->signature(),
             'nonce' => $this->nonce,
@@ -243,6 +257,10 @@ class BitstampNet
             'price' => $price,
             'limit_price' => $limitPrice,
             'daily_order' => $dailyOrder));
+        // Add currency
+        $data['currency'] = $this->currentCurrency;
+
+        return $data;
     }
 
     public function conversionRate()
