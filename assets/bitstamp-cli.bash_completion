@@ -44,6 +44,13 @@ _bitstamp-cli()
         *)
             opt="$("$currentBin" "$currentCommand" --help |
                     sed '1,/^OPTIONS/d;/^ARGUMENTS/,$d' | grep -o -- '--[^ ,]*')"
+            if [[ $currentCommand = "cancelOrder" ]] && [[ $cur != -* ]]; then
+                local openOrders
+
+                openOrders="$("$currentBin" openOrders --format json 2>/dev/null | \
+                        sed -r 's/}[^$]/}\n/g' | sed -r 's/^.*"id":"([^"]+)".*$/\1/')"
+                opt="$opt $openOrders"
+            fi
             COMPREPLY=( $(compgen -W "$opt" -- "${cur}") )
             return 0
             ;;
