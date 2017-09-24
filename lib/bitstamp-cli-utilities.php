@@ -4,6 +4,11 @@ function echon($str = '')
     echo "$str\n";
 }
 
+function echone($str)
+{
+    fwrite(STDERR, $str);
+}
+
 function howManyBTCCanIBuyWithAllMyBalance($bitstamp, $price)
 {
     $data = $bitstamp->balance();

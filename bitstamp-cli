@@ -195,12 +195,12 @@ try {
             printOutput($data, $format);
             break;
         default:
-            echon(basename(__FILE__).": unrecognized argument \"$command\"");
+            echone(basename(__FILE__).": unrecognized argument \"$command\"");
             exit(1);
             break;
     }
 } catch (Mx17\BitstampPHP\APIErrorException $e) {
-    echon(basename(__FILE__).": ".$e->getMessage());
+    echone(basename(__FILE__).": ".$e->getMessage());
     exit(33);
 }
 
