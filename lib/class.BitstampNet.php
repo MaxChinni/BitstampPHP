@@ -75,7 +75,28 @@ class BitstampNet
 
     public function ticker()
     {
-        return $this->get("https://www.bitstamp.net/api/v2/ticker/{$this->currentCurrency}/");
+        $data = $this->get("https://www.bitstamp.net/api/v2/ticker/{$this->currentCurrency}/");
+
+        // Reorder
+        $newData = array(
+            'timestamp' => $data['timestamp'],
+            'last' => $data['last'],
+            'low' => $data['low'],
+            'high' => $data['high'],
+            'open' => $data['open'],
+            'bid' => $data['bid'],
+            'ask' => $data['ask']
+        );
+
+        // Add remaining keys
+        $keys = array_keys($newData);
+        foreach($data as $k => $d) {
+            if (! in_array($k, $keys)) {
+                $newData[$k] = $d;
+            }
+        }
+
+        return $newData;
     }
 
     public function tickerHour()
