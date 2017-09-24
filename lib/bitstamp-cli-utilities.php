@@ -33,7 +33,11 @@ function askConfirmation($prompt = null)
 
 function printOutput($data, $format) {
     if ($format === 'table') {
-        if (array_keys($data)[0] !== 0) {
+        if (is_bool($data)) {
+            $data = array(array($data ? 'true' : 'false'));
+        } else if (is_string($data)) {
+            $data = array(array($data));
+        } else if (array_keys($data)[0] !== 0) {
             $data = array($data);
         }
         printTable($data);
