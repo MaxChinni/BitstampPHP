@@ -42,13 +42,9 @@ _bitstamp-cli()
             return 0
             ;;
         *)
-            local options
-
-            options="$("$currentBin" "$currentCommand" --help |
-                    sed '1,/^OPTIONS/d' | grep -o -- '--[^ ,]*')"
-
-
-            COMPREPLY=( $(compgen -W "$options" -- "${cur}") )
+            opt="$("$currentBin" "$currentCommand" --help |
+                    sed '1,/^OPTIONS/d;/^ARGUMENTS/,$d' | grep -o -- '--[^ ,]*')"
+            COMPREPLY=( $(compgen -W "$opt" -- "${cur}") )
             return 0
             ;;
     esac
