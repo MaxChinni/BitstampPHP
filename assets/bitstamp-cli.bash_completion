@@ -15,7 +15,13 @@ _bitstamp-cli()
     prev="${COMP_WORDS[COMP_CWORD-1]}"
 
     case "$prev" in
-        --amount|--price|--currency)
+        --amount|--price)
+            return 0
+            ;;
+        --currency)
+            opts="$("$currentBin" help-currencies --format json |\
+                    sed -r 's/^\[|\]$|"name":|[{}"]//g;s/,/ /g')"
+            COMPREPLY=( $(compgen -W "$opts" -- "${cur}") )
             return 0
             ;;
         --format)
