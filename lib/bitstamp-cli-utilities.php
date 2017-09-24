@@ -27,6 +27,16 @@ function howManyBTCCanIBuyWithAllMyBalance($bitstamp, $price)
     return $btc;
 }
 
+function howMuchIsIncome($bitstamp, $price, $amount) {
+    $data = $bitstamp->balance();
+    $feePercent = $data['fee'];
+    $fee = $amount * $feePercent / 100;
+    $available_to_sell = $amount - $fee;
+    $income = $available_to_sell * $price;
+
+    return $income;
+}
+
 function askConfirmation($prompt = null)
 {
     if ($prompt !== null) {
