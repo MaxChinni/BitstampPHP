@@ -28,6 +28,10 @@ _bitstamp-cli()
             COMPREPLY=( $(compgen -W "table json" -- "${cur}") )
             return 0
             ;;
+        --sort)
+            COMPREPLY=( $(compgen -W "asc desc" -- "${cur}") )
+            return 0
+            ;;
         "$currentBin")
             if [[ ${cur} == -* ]] ; then
                 opts="--help"
