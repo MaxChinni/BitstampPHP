@@ -37,6 +37,8 @@ function printOutput($data, $format) {
             $data = array(array($data ? 'true' : 'false'));
         } else if (is_string($data)) {
             $data = array(array($data));
+        } else if (is_array($data) && count($data) === 0) {
+            $data = array(array('No data'));
         } else if (array_keys($data)[0] !== 0) {
             $data = array($data);
         }
