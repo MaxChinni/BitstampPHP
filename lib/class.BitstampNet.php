@@ -263,8 +263,12 @@ class BitstampNet
         if (isset($body['status']) && $body['status'] == 'error') {
             if (isset($body['reason']['__all__'])) {
                 throw new APIErrorException(implode("\n", $body['reason']['__all__']));
-            } else {
+            } else if (isset($body['reason']) && is_array($body['reason'])) {
                 throw new APIErrorException(implode("\n", $body['reason']));
+            } else if (isset($body['reason'])) {
+                throw new APIErrorException(print_r($body['reason'], 1));
+            } else {
+                throw new APIErrorException(print_r($body, 1));
             }
         }
         if (isset($body['error'])) {
