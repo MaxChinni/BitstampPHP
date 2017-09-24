@@ -82,6 +82,7 @@ $cli = Cli::create()
     ->command('cancelOrder')
         ->opt('noprompt:n', $noPromptOptionsDecription, false, 'boolean')
         ->arg('orderId', 'The order id.', true)
+    ->command('help-currencies')
     ->command('*')
         ->opt(
             'format:f',
@@ -185,6 +186,13 @@ try {
                 $data = $bitstamp->cancelOrder($orderId);
                 printOutput($data, $format);
             }
+            break;
+        case 'help-currencies':
+            $data = array();
+            foreach($bitstamp->getAllowedCurrencyPairs() as $c) {
+                $data[] = array('name' => $c);
+            }
+            printOutput($data, $format);
             break;
         default:
             echon(basename(__FILE__).": unrecognized argument \"$command\"");
