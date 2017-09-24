@@ -1,0 +1,49 @@
+#!/bin/bash
+
+_bitstamp-cli()
+{
+    local cur opts commands
+    local currentBin currentCommand
+    #local prev
+
+    currentBin="${COMP_WORDS[0]}"
+    currentCommand="${COMP_WORDS[1]}"
+    commands="$("$currentBin" --help | sed '1,/^COMMAND/d' | awk '{ print $1 }')"
+
+    COMPREPLY=()
+    cur="${COMP_WORDS[COMP_CWORD]}"
+    prev="${COMP_WORDS[COMP_CWORD-1]}"
+
+    case "$prev" in
+        --amount|--price|--currency)
+            return 0
+            ;;
+        --format)
+            COMPREPLY=( $(compgen -W "table json" -- "${cur}") )
+            return 0
+            ;;
+        "$currentBin")
+            if [[ ${cur} == -* ]] ; then
+                opts="--help"
+                COMPREPLY=( $(compgen -W "${opts}" -- "${cur}") )
+            else
+                COMPREPLY=( $(compgen -W "$commands" -- "${cur}") )
+            fi
+            return 0
+            ;;
+        *)
+            local options
+
+            options="$("$currentBin" "$currentCommand" --help |
+                    sed '1,/^OPTIONS/d' | grep -o -- '--[^ ,]*')"
+
+
+            COMPREPLY=( $(compgen -W "$options" -- "${cur}") )
+            return 0
+            ;;
+    esac
+
+}
+complete -F _bitstamp-cli bitstamp-cli
+
+# vim: ft=sh syntax=on
