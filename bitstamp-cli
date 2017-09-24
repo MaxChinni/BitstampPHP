@@ -42,10 +42,10 @@ $cli = Cli::create()
     ->command('openOrders')
         ->opt('currency', $currencyOptionDescription, false)
     ->command('cancelAllOrders')
-        ->opt('no-prompt:n', $noPromptOptionsDecription, false, 'boolean')
+        ->opt('noprompt:n', $noPromptOptionsDecription, false, 'boolean')
     ->command('buy')
         ->opt('currency', $currencyOptionDescription, false)
-        ->opt('no-prompt:n', $noPromptOptionsDecription, false, 'boolean')
+        ->opt('noprompt:n', $noPromptOptionsDecription, false, 'boolean')
         ->opt('amount:a', 'Amount. You can specify "all" to invest all your available budget', true, 'string')
         ->opt('price:p', 'Price', true, 'string')
         ->opt(
@@ -62,7 +62,7 @@ $cli = Cli::create()
         )
     ->command('sell')
         ->opt('currency', $currencyOptionDescription, false)
-        ->opt('no-prompt:n', $noPromptOptionsDecription, false, 'boolean')
+        ->opt('noprompt:n', $noPromptOptionsDecription, false, 'boolean')
         ->opt('amount:a', 'Amount', true, 'string')
         ->opt('price:p', 'Price', true, 'string')
         ->opt(
@@ -80,7 +80,7 @@ $cli = Cli::create()
     ->command('orderStatus')
         ->arg('orderId', 'The order id.', true)
     ->command('cancelOrder')
-        ->opt('no-prompt:n', $noPromptOptionsDecription, false, 'boolean')
+        ->opt('noprompt:n', $noPromptOptionsDecription, false, 'boolean')
         ->arg('orderId', 'The order id.', true)
     ->command('*')
         ->opt(
@@ -96,7 +96,7 @@ $currency = $args->getOpt('currency', $bitstamp->getCurrency());
 $bitstamp->setCurrency($currency);
 
 // No prompt option
-$noPrompt = $args->getOpt('no-prompt', false);
+$noPrompt = $args->getOpt('noprompt', false);
 
 // Format option
 $format = $args->getOpt('format', 'table');
