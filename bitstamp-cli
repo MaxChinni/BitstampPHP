@@ -81,58 +81,71 @@ $cli = Cli::create()
         ->arg('orderId', 'The order id.', true)
     ->command('cancelOrder')
         ->opt('no-prompt:n', $noPromptOptionsDecription, false, 'boolean')
-        ->arg('orderId', 'The order id.', true);
+        ->arg('orderId', 'The order id.', true)
+    ->command('*')
+        ->opt(
+            'format:f',
+            'Change output format. Allowed values are "table", "json". Default is "table".',
+            false,
+            'string');
 
 $args = $cli->parse($argv, true);
+
+// Currency option (if available)
 $currency = $args->getOpt('currency', $bitstamp->getCurrency());
 $bitstamp->setCurrency($currency);
+
+// No prompt option
 $noPrompt = $args->getOpt('no-prompt', false);
+
+// Format option
+$format = $args->getOpt('format', 'table');
 
 try {
     switch ($command = $args->getCommand()) {
         case 'ticker':
             $data = $bitstamp->ticker();
-            printTable(array($data));
+            printOutput($data, $format);
             break;
         case 'tickerHour':
             $data = $bitstamp->tickerHour();
-            printTable(array($data));
+            printOutput($data, $format);
             break;
-        case 'orderBook':
-            $data = $bitstamp->orderBook();
-            echo print_r($data, 1)."\n";
-            break;
+//        case 'orderBook':
+//            $data = $bitstamp->orderBook();
+//            printOutput($data, $format);
+//            break;
         case 'transactions':
             $data = $bitstamp->transactions();
-            printTable($data);
+            printOutput($data, $format);
             break;
         case 'conversionRate':
             $data = $bitstamp->conversionRate();
-            printTable(array($data));
+            printOutput($data, $format);
             break;
         case 'balance':
             $data = $bitstamp->balance();
-            printTable(array($data));
+            printOutput($data, $format);
             break;
         case 'openOrders':
             $data = $bitstamp->openOrders();
-            printTable($data);
+            printOutput($data, $format);
             break;
         case 'userTransactions':
             $offset = $args->getOpt('offset', 0);
             $limit = $args->getOpt('limit', 10);
             $sort = $args->getOpt('sort', 'desc');
             $data = $bitstamp->userTransactions($offset, $limit, $sort);
-            printTable($data);
+            printOutput($data, $format);
             break;
         case 'openOrders':
             $data = $bitstamp->openOrders();
-            printTable($data);
+            printOutput($data, $format);
             break;
         case 'cancelAllOrders':
             if ($noPrompt || askConfirmation()) {
                 $data = $bitstamp->cancelAllOrders();
-                echo print_r($data, 1)."\n";
+                printOutput($data, $format);
             }
             break;
         case 'buy':
@@ -147,7 +160,7 @@ try {
             $prompt = "Buy $amount BTC for $price {$bitstamp->getCurrency()}";
             if ($noPrompt || askConfirmation($prompt)) {
                 $data = $bitstamp->buy($amount, $price, $limitPrice, $dailyOrder);
-                printTable(array($data));
+                printOutput($data, $format);
             }
             break;
         case 'sell':
@@ -158,19 +171,19 @@ try {
             $prompt = "Sell $amount BTC for $price {$bitstamp->getCurrency()}";
             if ($noPrompt || askConfirmation($prompt)) {
                 $data = $bitstamp->sell($amount, $price, $limitPrice, $dailyOrder);
-                printTable(array($data));
+                printOutput($data, $format);
             }
             break;
         case 'orderStatus':
             $orderId = $args->getArg('orderId');
             $data = $bitstamp->orderStatus($orderId);
-            echo print_r($data, 1)."\n";
+            printOutput($data, $format);
             break;
         case 'cancelOrder':
             if ($noPrompt || askConfirmation()) {
                 $orderId = $args->getArg('orderId');
                 $data = $bitstamp->cancelOrder($orderId);
-                printTable(array($data));
+                printOutput($data, $format);
             }
             break;
         default:

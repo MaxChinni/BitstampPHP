@@ -30,3 +30,16 @@ function askConfirmation($prompt = null)
     $response = readline("{$prompt}Are you sure? (Yes/[No]) ");
     return $response === 'Yes';
 }
+
+function printOutput($data, $format) {
+    if ($format === 'table') {
+        if (array_keys($data)[0] !== 0) {
+            $data = array($data);
+        }
+        printTable($data);
+    } elseif ($format == 'json') {
+        echo json_encode($data)."\n";
+    } else {
+        throw new \Exception("unknown format $format");
+    }
+}

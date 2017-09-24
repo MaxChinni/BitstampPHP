@@ -81,7 +81,7 @@ call                                      | method
 ----------------------------------------- | ------------------------------
 Ticker                                    | `ticker()`
 Hourly ticker                             | `tickerHour()`
-Order book                                | `orderBook()`
+Order book                                | *current unsupported*
 Transactions                              | `transactions()`
 EUR/USD conversion rate                   | `conversionRate()`
 Account balance                           | `balance()`
