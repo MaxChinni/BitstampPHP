@@ -82,10 +82,11 @@ $cli = Cli::create()
         ->opt('noprompt:n', $noPromptOptionsDecription, false, 'boolean')
         ->arg('orderId', 'The order id.', true)
     ->command('help-currencies')
+    ->command('help-formats')
     ->command('*')
         ->opt(
             'format:f',
-            'Change output format. Allowed values are "table", "json" and "csv". Default is "table".',
+            'Change output format. See --help-formats. Default is "table".',
             false,
             'string'
         );
@@ -194,6 +195,13 @@ try {
                 $data[] = array('name' => $c);
             }
             printOutput($data, $format);
+            break;
+        case 'help-formats':
+            printOutput([
+                [ 'format' => 'table' ],
+                [ 'format' => 'json' ],
+                [ 'format' => 'csv' ],
+            ], $format);
             break;
         default:
             echone(basename(__FILE__).": unrecognized argument \"$command\"\n");
