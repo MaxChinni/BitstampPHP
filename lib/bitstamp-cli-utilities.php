@@ -71,6 +71,11 @@ function printTable($data)
 
 function printOutput($data, $format)
 {
+    if ($format === 'php') {
+        echo print_r($data, 1)."\n";
+        return;
+    }
+
     // Normalize data
     if (is_bool($data)) {
         $data = array(array($data ? 'true' : 'false'));

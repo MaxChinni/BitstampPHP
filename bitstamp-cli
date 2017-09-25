@@ -203,6 +203,7 @@ try {
                 [ 'format' => 'table' ],
                 [ 'format' => 'json' ],
                 [ 'format' => 'csv' ],
+                [ 'format' => 'php' ]
             ], $format);
             break;
         default:
