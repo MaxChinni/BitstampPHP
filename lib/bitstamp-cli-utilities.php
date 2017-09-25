@@ -47,6 +47,17 @@ function askConfirmation($prompt = null)
     return $response === 'Yes';
 }
 
+function printCSV($data)
+{
+    $first = 0;
+    foreach ($data as $c => $line) {
+        if ($first++ === 0) {
+            echo implode(',', array_keys($line))."\n";
+        }
+        echo implode(',', $line)."\n";
+    }
+}
+
 function printTable($data)
 {
     if (count($data) === 0) {
@@ -60,19 +71,23 @@ function printTable($data)
 
 function printOutput($data, $format)
 {
+    // Normalize data
+    if (is_bool($data)) {
+        $data = array(array($data ? 'true' : 'false'));
+    } elseif (is_string($data)) {
+        $data = array(array($data));
+    } elseif (is_array($data) && count($data) === 0) {
+        $data = array(array('No data'));
+    } elseif (array_keys($data)[0] !== 0) {
+        $data = array($data);
+    }
+
     if ($format === 'table') {
-        if (is_bool($data)) {
-            $data = array(array($data ? 'true' : 'false'));
-        } elseif (is_string($data)) {
-            $data = array(array($data));
-        } elseif (is_array($data) && count($data) === 0) {
-            $data = array(array('No data'));
-        } elseif (array_keys($data)[0] !== 0) {
-            $data = array($data);
-        }
         printTable($data);
     } elseif ($format == 'json') {
         echo json_encode($data)."\n";
+    } elseif ($format == 'csv') {
+        printCSV($data);
     } else {
         throw new \Exception("unknown format $format");
     }

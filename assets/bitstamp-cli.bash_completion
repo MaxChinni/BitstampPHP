@@ -25,7 +25,7 @@ _bitstamp-cli()
             return 0
             ;;
         --format)
-            COMPREPLY=( $(compgen -W "table json" -- "${cur}") )
+            COMPREPLY=( $(compgen -W "table json csv" -- "${cur}") )
             return 0
             ;;
         --sort)

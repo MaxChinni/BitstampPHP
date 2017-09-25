@@ -85,7 +85,7 @@ $cli = Cli::create()
     ->command('*')
         ->opt(
             'format:f',
-            'Change output format. Allowed values are "table", "json". Default is "table".',
+            'Change output format. Allowed values are "table", "json" and "csv". Default is "table".',
             false,
             'string'
         );
