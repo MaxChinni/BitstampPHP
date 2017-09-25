@@ -3,7 +3,6 @@
 require __DIR__ . '/vendor/autoload.php';
 require __DIR__.'/lib/class.APIException.php';
 require __DIR__.'/lib/class.BitstampNet.php';
-require __DIR__.'/lib/debug.php';
 require __DIR__.'/lib/bitstamp-cli-utilities.php';
 
 use Garden\Cli\Cli;

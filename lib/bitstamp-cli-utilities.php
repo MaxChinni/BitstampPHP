@@ -47,6 +47,17 @@ function askConfirmation($prompt = null)
     return $response === 'Yes';
 }
 
+function printTable($data)
+{
+    if (count($data) === 0) {
+        echo "No data\n";
+        return;
+    }
+    $renderer = new MathieuViossat\Util\ArrayToTextTable($data);
+    $renderer->setDecorator(new \Zend\Text\Table\Decorator\Ascii());
+    echo $renderer->getTable();
+}
+
 function printOutput($data, $format)
 {
     if ($format === 'table') {
