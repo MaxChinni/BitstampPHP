@@ -27,7 +27,8 @@ function howManyBTCCanIBuyWithAllMyBalance($bitstamp, $price)
     return $btc;
 }
 
-function howMuchIsIncome($bitstamp, $price, $amount) {
+function howMuchIsIncome($bitstamp, $price, $amount)
+{
     $data = $bitstamp->balance();
     $feePercent = $data['fee'];
     $fee = $amount * $feePercent / 100;
@@ -46,15 +47,16 @@ function askConfirmation($prompt = null)
     return $response === 'Yes';
 }
 
-function printOutput($data, $format) {
+function printOutput($data, $format)
+{
     if ($format === 'table') {
         if (is_bool($data)) {
             $data = array(array($data ? 'true' : 'false'));
-        } else if (is_string($data)) {
+        } elseif (is_string($data)) {
             $data = array(array($data));
-        } else if (is_array($data) && count($data) === 0) {
+        } elseif (is_array($data) && count($data) === 0) {
             $data = array(array('No data'));
-        } else if (array_keys($data)[0] !== 0) {
+        } elseif (array_keys($data)[0] !== 0) {
             $data = array($data);
         }
         printTable($data);
