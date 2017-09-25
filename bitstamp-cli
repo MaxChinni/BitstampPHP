@@ -88,7 +88,8 @@ $cli = Cli::create()
             'format:f',
             'Change output format. Allowed values are "table", "json". Default is "table".',
             false,
-            'string');
+            'string'
+        );
 
 $args = $cli->parse($argv, true);
 
@@ -190,7 +191,7 @@ try {
             break;
         case 'help-currencies':
             $data = array();
-            foreach($bitstamp->getAllowedCurrencyPairs() as $c) {
+            foreach ($bitstamp->getAllowedCurrencyPairs() as $c) {
                 $data[] = array('name' => $c);
             }
             printOutput($data, $format);
