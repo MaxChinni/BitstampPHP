@@ -90,7 +90,7 @@ class BitstampNet
 
         // Add remaining keys
         $keys = array_keys($newData);
-        foreach($data as $k => $d) {
+        foreach ($data as $k => $d) {
             if (! in_array($k, $keys)) {
                 $newData[$k] = $d;
             }
@@ -302,9 +302,9 @@ class BitstampNet
         if (isset($body['status']) && $body['status'] == 'error') {
             if (isset($body['reason']['__all__'])) {
                 throw new APIErrorException(implode("\n", $body['reason']['__all__']));
-            } else if (isset($body['reason']) && is_array($body['reason'])) {
+            } elseif (isset($body['reason']) && is_array($body['reason'])) {
                 throw new APIErrorException(implode("\n", $body['reason']));
-            } else if (isset($body['reason'])) {
+            } elseif (isset($body['reason'])) {
                 throw new APIErrorException(print_r($body['reason'], 1));
             } else {
                 throw new APIErrorException(print_r($body, 1));
