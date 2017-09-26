@@ -64,7 +64,7 @@ $cli = Cli::create()
         ->description('Place a sell limit order')
         ->opt('currency', $currencyOptionDescription, false)
         ->opt('noprompt:n', $noPromptOptionsDecription, false, 'boolean')
-        ->opt('amount:a', 'Amount', true, 'string')
+        ->opt('amount:a', 'Amount. You can specify "all" to sell all your available bitcoins', true, 'string')
         ->opt('price:p', 'Price', true, 'string')
         ->opt(
             'limit-price:l',
@@ -172,6 +172,10 @@ try {
             $price = $args->getOpt('price');
             $limitPrice = $args->getOpt('limit-price');
             $dailyOrder = $args->getOpt('daily-order');
+            if ($amount === 'all') {
+                $sellableBTC = $bitstamp->balance()['btc_available'];
+                $amount = $sellableBTC;
+            }
             $income = howMuchIsIncome($bitstamp, $price, $amount);
             $prompt = "Sell $amount BTC for $price {$bitstamp->getCurrency()}, income should be $income";
             if ($noPrompt || askConfirmation($prompt)) {
