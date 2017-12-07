@@ -16,12 +16,12 @@ No guarantee or warranty implied. Use at your own risk. Be careful to set the ri
 
 **Get current exchange rates**
 
-    $ ./bitstamp-cli ticker
-    +---------+---------+------------+---------+---------+---------------+---------+---------+---------+
-    |  HIGH   |  LAST   | TIMESTAMP  |   BID   |  VWAP   |    VOLUME     |   LOW   |   ASK   |  OPEN   |
-    +---------+---------+------------+---------+---------+---------------+---------+---------+---------+
-    | 3268.59 | 3014.12 | 1506089415 | 3003.81 | 3090.59 | 3117.96511945 | 2968.60 | 3014.12 | 3051.69 |
-    +---------+---------+------------+---------+---------+---------------+---------+---------+---------+
+    $ ./bitstamp-cli ticker    
+    +------------+----------+----------+----------+----------+----------+----------+----------+---------------+----------+
+    | TIMESTAMP  |   LAST   |   LOW    |   HIGH   |   OPEN   |   BID    |   ASK    |   VWAP   |    VOLUME     | CURRENCY |
+    +------------+----------+----------+----------+----------+----------+----------+----------+---------------+----------+
+    | 1512633123 | 12099.00 | 10350.00 | 12150.00 | 11605.51 | 12099.00 | 12099.99 | 11188.33 | 6734.67402851 | btceur   |
+    +------------+----------+----------+----------+----------+----------+----------+----------+---------------+----------+
 
 **Get EUR/USD conversion rate**
 
@@ -32,9 +32,9 @@ No guarantee or warranty implied. Use at your own risk. Be careful to set the ri
     | 1.1928 | 1.2060 |
     +--------+--------+
 
-**Place an order to buy 1 BTC at the price of 2900 €**
+**Place an order to buy 1 BTC at the price of 12900 €**
 
-    $ ./bitstamp-cli buy --amount 1 --price 2900 --currency btceur
+    $ ./bitstamp-cli buy --amount 1 --price 12900 --currency btceur
 
 ### BitstampPHP PHP class usage
 
