@@ -49,8 +49,9 @@ echo print_r($data, 1)."\n";
 
 ## Install
 
-You need a working PHP environment and [composer](https://getcomposer.org/)
+You need a working PHP environment (with `mbstring`) and [composer](https://getcomposer.org/)
 
+    sudo apt install php-mbstring
     git clone https://github.com/MaxChinni/BitstampPHP.git
     cd BitstampPHP/
     composer.phar update
