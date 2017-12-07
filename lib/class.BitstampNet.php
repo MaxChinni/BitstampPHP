@@ -21,7 +21,8 @@ class BitstampNet
     );
     private $currentCurrency;
     private $allowedCurrencyPairs = array('btcusd', 'btceur', 'eurusd', 'xrpusd', 'xrpeur',
-            'xrpbtc', 'ltcusd', 'ltceur', 'ltcbtc', 'ethusd', 'etheur', 'ethbtc');
+            'xrpbtc', 'ltcusd', 'ltceur', 'ltcbtc', 'ethusd', 'etheur', 'ethbtc',
+            'bchusd', 'bcheur', 'bchbtc');
     private $transactionTypeHumanReadable = array(0 => 'buy', 1 => 'sell');
     private $userTransactionTypeHumanReadable = array(
          0 => 'deposit',

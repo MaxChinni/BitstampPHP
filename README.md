@@ -105,6 +105,8 @@ Bitcoin deposit address                   | *currently unsupported*
 Unconfirmed bitcoin deposits              | *currently unsupported*
 Ripple withdrawal                         | *currently unsupported*
 Ripple deposit address                    | *currently unsupported*
+BCH withdrawal                            | *currently unsupported*
+BCH deposit address                       | *currently unsupported*
 Transfer balance from Sub to Main account | *currently unsupported*
 Transfer balance from Main to Sub Account | *currently unsupported*
 XRP withdrawal                            | *currently unsupported*
