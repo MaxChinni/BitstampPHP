@@ -88,7 +88,7 @@ $cli = Cli::create()
     ->command('*')
         ->opt(
             'format:f',
-            'Change output format. See --help-formats. Default is "table".',
+            'Change output format. See "help-formats". Default is "table".',
             false,
             'string'
         );
