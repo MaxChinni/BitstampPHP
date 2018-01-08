@@ -164,6 +164,12 @@ class BitstampNet
         // Add currency
         $data['currency'] = $this->currentCurrency;
 
+        // Add fiat balance
+        $currency1 = substr($this->currentCurrency, 0, 3);
+        $currency2 = substr($this->currentCurrency, 3, 3);
+        $data['ticker_ask'] = $this->ticker()['ask'];
+        $data[$currency2.'(calculated)'] = $data[$currency1.'_balance'] * $data['ticker_ask'];
+
         return $data;
     }
 
