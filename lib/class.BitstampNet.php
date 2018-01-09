@@ -11,7 +11,8 @@ class BitstampNet
             'customerId' => null,
             'apiKey' => null,
             'secret' => null,
-            'currency' => 'btcusd'),
+            'currency' => '',
+            'fiat' => ''),
         'proxy' => array(
             'host' => null,
             'port' => null,
@@ -20,9 +21,11 @@ class BitstampNet
         )
     );
     private $currentCurrency;
-    private $allowedCurrencyPairs = array('btcusd', 'btceur', 'eurusd', 'xrpusd', 'xrpeur',
+    private $allowedCurrencyPairs = array('', 'btcusd', 'btceur', 'eurusd', 'xrpusd', 'xrpeur',
             'xrpbtc', 'ltcusd', 'ltceur', 'ltcbtc', 'ethusd', 'etheur', 'ethbtc',
             'bchusd', 'bcheur', 'bchbtc');
+    private $fiat;
+    private $allowedFiat = array('eur', 'usd');
     private $transactionTypeHumanReadable = array(0 => 'buy', 1 => 'sell');
     private $userTransactionTypeHumanReadable = array(
          0 => 'deposit',
@@ -39,6 +42,7 @@ class BitstampNet
     {
         $this->options = array_replace_recursive($this->options, $options);
         $this->setCurrency($this->options['bitstamp']['currency']);
+        $this->setFiat($this->options['bitstamp']['fiat']);
         $this->curl = curl_init();
 
         // Proxy
@@ -61,6 +65,11 @@ class BitstampNet
         return $this->allowedCurrencyPairs;
     }
 
+    public function getAllowedFiat()
+    {
+        return $this->allowedFiat;
+    }
+
     public function setCurrency(string $currency)
     {
         if (! in_array($currency, $this->allowedCurrencyPairs)) {
@@ -74,9 +83,23 @@ class BitstampNet
         return $this->currentCurrency;
     }
 
-    public function ticker()
+    public function setFiat($fiat)
     {
-        $data = $this->get("https://www.bitstamp.net/api/v2/ticker/{$this->currentCurrency}/");
+        if (! in_array($fiat, $this->allowedFiat)) {
+            throw new \Exception('impossible parameter');
+        }
+        $this->fiat = $fiat;
+    }
+
+    public function getFiat()
+    {
+        return $this->fiat;
+    }
+
+    public function ticker($currency = null)
+    {
+        $currency = is_null($currency) ? $this->currentCurrency : $currency;
+        $data = $this->get("https://www.bitstamp.net/api/v2/ticker/$currency/");
 
         // Reorder
         $newData = array(
@@ -98,7 +121,7 @@ class BitstampNet
         }
 
         // Add currency
-        $newData['currency'] = $this->currentCurrency;
+        $newData['currency'] = $currency;
 
         return $newData;
     }
@@ -153,21 +176,55 @@ class BitstampNet
         return $data;
     }
 
-    public function balance()
+    public function balance($currency = null)
     {
-        $url = "https://www.bitstamp.net/api/v2/balance/{$this->currentCurrency}/";
+        if ($currency !== null) {
+            return $this->balanceCurrency($currency);
+        }
+
+        $url = "https://www.bitstamp.net/api/v2/balance/";
+
+        $data = $this->post($url, array(
+            'key' => $this->options['bitstamp']['apiKey'],
+            'signature' => $this->signature(),
+            'nonce' => $this->nonce));
+
+        if (($fiat = $this->fiat) === null) {
+            throw new \Exception('missing fiat value');
+        }
+        $data["tot_in_{$fiat}_value"] = 0;
+        foreach ($data as $k => $v) {
+            if (strpos($k, '_available') !== false) {
+                $currency = substr($k, 0, 3);
+                if ($currency === 'eur' || $currency == 'usd') {
+                    continue;
+                }
+                $data["in_{$fiat}_{$currency}_value"] = sprintf(
+                    "%.2f",
+                    $v * $this->ticker($currency.$this->fiat)['ask']
+                );
+                $data["tot_in_{$fiat}_value"] += $data["in_{$fiat}_{$currency}_value"];
+            }
+        }
+
+        return $data;
+    }
+
+    public function balanceCurrency($currency)
+    {
+        $url = "https://www.bitstamp.net/api/v2/balance/$currency/";
 
         $data = $this->post($url, array(
             'key' => $this->options['bitstamp']['apiKey'],
             'signature' => $this->signature(),
             'nonce' => $this->nonce));
         // Add currency
-        $data['currency'] = $this->currentCurrency;
+        $data['currency'] = $currency;
 
         // Add fiat balance
-        $currency1 = substr($this->currentCurrency, 0, 3);
-        $currency2 = substr($this->currentCurrency, 3, 3);
-        $data['ticker_ask'] = $this->ticker()['ask'];
+        $currency1 = substr($currency, 0, 3);
+        $currency2 = substr($currency, 3, 3);
+        $data['ticker_ask'] = $this->ticker($currency)['ask'];
         $data[$currency2.'(calculated)'] = $data[$currency1.'_balance'] * $data['ticker_ask'];
 
         return $data;

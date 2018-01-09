@@ -29,8 +29,10 @@ $cli = Cli::create()
     ->command('transactions')
         ->opt('currency', $currencyOptionDescription, false)
     ->command('conversionRate')
-        ->description('EUR/USD conversion rate')
+        ->description('EUR/USD conversion rate.')
     ->command('balance')
+        ->description('Show your balance. If you specify --currency, shows only currency details.')
+        ->opt('fiat', 'Fiat money. Possible values are "eur" or "usd"', false, 'string')
         ->opt('currency', $currencyOptionDescription, false)
     ->command('openOrders')
     ->command('userTransactions')
@@ -43,7 +45,7 @@ $cli = Cli::create()
     ->command('cancelAllOrders')
         ->opt('noprompt:n', $noPromptOptionsDecription, false, 'boolean')
     ->command('buy')
-        ->description('Place a buy limit order')
+        ->description('Place a buy limit order.')
         ->opt('currency', $currencyOptionDescription, false)
         ->opt('noprompt:n', $noPromptOptionsDecription, false, 'boolean')
         ->opt('amount:a', 'Amount. You can specify "all" to invest all your available budget', true, 'string')
@@ -61,7 +63,7 @@ $cli = Cli::create()
             'boolean'
         )
     ->command('sell')
-        ->description('Place a sell limit order')
+        ->description('Place a sell limit order.')
         ->opt('currency', $currencyOptionDescription, false)
         ->opt('noprompt:n', $noPromptOptionsDecription, false, 'boolean')
         ->opt('amount:a', 'Amount. You can specify "all" to sell all your available bitcoins', true, 'string')
@@ -84,6 +86,7 @@ $cli = Cli::create()
         ->opt('noprompt:n', $noPromptOptionsDecription, false, 'boolean')
         ->arg('orderId', 'The order id.', true)
     ->command('help-currencies')
+    ->command('help-fiat')
     ->command('help-formats')
     ->command('*')
         ->opt(
@@ -96,8 +99,13 @@ $cli = Cli::create()
 $args = $cli->parse($argv, true);
 
 // Currency option (if available)
+$currencyPassed = true;
+if ($args->getOpt('currency', null) === null) {
+    $currencyPassed = false;
+}
 $currency = $args->getOpt('currency', $bitstamp->getCurrency());
 $bitstamp->setCurrency($currency);
+$bitstamp->setFiat($args->getOpt('fiat', $bitstamp->getFiat()));
 
 // No prompt option
 $noPrompt = $args->getOpt('noprompt', false);
@@ -128,7 +136,11 @@ try {
             printOutput($data, $format);
             break;
         case 'balance':
-            $data = $bitstamp->balance();
+            if (!!$currencyPassed) {
+                $data = $bitstamp->balance($currency);
+            } else {
+                $data = $bitstamp->balance();
+            }
             printOutput($data, $format);
             break;
         case 'openOrders':
@@ -198,6 +210,13 @@ try {
         case 'help-currencies':
             $data = array();
             foreach ($bitstamp->getAllowedCurrencyPairs() as $c) {
+                $data[] = array('name' => $c);
+            }
+            printOutput($data, $format);
+            break;
+        case 'help-fiat':
+            $data = array();
+            foreach ($bitstamp->getAllowedFiat() as $c) {
                 $data[] = array('name' => $c);
             }
             printOutput($data, $format);

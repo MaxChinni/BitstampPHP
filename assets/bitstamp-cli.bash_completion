@@ -24,6 +24,12 @@ _bitstamp-cli()
             COMPREPLY=( $(compgen -W "$opts" -- "${cur}") )
             return 0
             ;;
+        --fiat)
+            opts="$("$currentBin" help-fiat --format json |\
+                    sed -r 's/^\[|\]$|"name":|[{}"]//g;s/,/ /g')"
+            COMPREPLY=( $(compgen -W "$opts" -- "${cur}") )
+            return 0
+            ;;
         --format)
             opts="$("$currentBin" help-formats --format csv | sed '1d')"
             COMPREPLY=( $(compgen -W "$opts" -- "${cur}") )
