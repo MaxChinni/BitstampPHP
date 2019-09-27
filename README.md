@@ -51,10 +51,10 @@ echo print_r($data, 1)."\n";
 
 You need a working PHP environment (with `mbstring`) and [composer](https://getcomposer.org/)
 
-    sudo apt install php-mbstring
+    sudo apt install php-mbstring composer
     git clone https://github.com/MaxChinni/BitstampPHP.git
     cd BitstampPHP/
-    composer.phar update
+    composer update
 
 ## Configure
 
